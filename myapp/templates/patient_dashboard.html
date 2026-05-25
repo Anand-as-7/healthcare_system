@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedTech Global - Patient Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dce2f3;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#00525a",
+                        "on-tertiary-container": "#82edfc",
+                        "on-primary-fixed-variant": "#003dab",
+                        "on-background": "#151c27",
+                        "inverse-surface": "#2a313d",
+                        "on-primary-container": "#d4dcff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-tint": "#1353d8",
+                        "surface-container-highest": "#dce2f3",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "on-secondary-fixed": "#25005a",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#00174d",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-container": "#e7eefe",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f9f9ff",
+                        "surface-container-high": "#e2e8f8",
+                        "on-tertiary-fixed-variant": "#004f57",
+                        "on-tertiary-fixed": "#001f23",
+                        "tertiary-container": "#006c77",
+                        "surface-dim": "#d3daea",
+                        "inverse-primary": "#b5c4ff",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#eaddff",
+                        "surface-bright": "#f9f9ff",
+                        "on-surface": "#151c27",
+                        "on-surface-variant": "#434654",
+                        "secondary-fixed-dim": "#d2bbff",
+                        "tertiary-fixed": "#92f1ff",
+                        "surface": "#f9f9ff",
+                        "secondary-container": "#8b4aff",
+                        "inverse-on-surface": "#ebf1ff",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#6ad6e5",
+                        "primary-container": "#1a56db",
+                        "secondary": "#7127e5",
+                        "surface-variant": "#dce2f3",
+                        "on-secondary-container": "#fffbff",
+                        "primary": "#003fb1",
+                        "outline-variant": "#c3c5d7",
+                        "on-secondary-fixed-variant": "#5a00c6",
+                        "outline": "#737686",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "16px",
+                        "xl": "24px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-padding": "64px",
+                        "margin-desktop": "48px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "margin-mobile": "16px",
+                        "unit": "8px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen">
+<!-- Top App Bar (Shared Component) -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-primary" data-icon="monitor_heart">monitor_heart</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">MedTech Global</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high/50 p-2 rounded-full transition-colors active:scale-95 duration-200" data-icon="notifications">notifications</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="Profile" data-alt="Close-up studio portrait of a friendly middle-aged man with short dark hair and a warm smile. The lighting is bright and professional, using a softbox for clean, modern highlights. The background is a minimalist medical office with subtle blue-toned glass accents, maintaining the MedTech brand identity. The overall mood is approachable, clinical yet warm, and highly trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCt3S6WN7tgrgDn6SKQHPQo5n-9ivlUNSnjv-uyYCnSJaEn_vxzJxEDgpApFqirHqaQFFQqFC_Lnry3CYz3_D3Rgu3q3T3uCmWUHW1nBkeI_EkDaPJZskWp-CeBaAHpf3mPz-ogPRlTgoBuBD_7PJP2gEdR2QlBPBY9MzF16X4oG_MkOsYdof-Qh8uHHwjKe692xdYIY5RJxCkw9RDIC43hEMj2WrC15cnwmTe_8Sp6nUetqSKnmFevlKs3NRqVU_q4RTlueqYZZuqZ"/>
+</div>
+</div>
+</header>
+<!-- Sidebar Navigation (Desktop) -->
+<aside class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant/20 pt-16 z-40">
+<div class="p-6 flex items-center gap-4 border-b border-outline-variant/10 mb-4">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface font-bold">John Doe</p>
+<p class="text-xs text-on-surface-variant">Patient ID: #MT-8821</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1 px-3">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-body-md text-body-md">Schedule</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+<span class="font-body-md text-body-md">Records</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="font-body-md text-body-md">Profile</span>
+</a>
+<div class="my-4 border-t border-outline-variant/10"></div>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 md:pb-8 md:pl-72 px-margin-mobile md:px-margin-desktop transition-all duration-300">
+<!-- Welcome Hero Section -->
+<section class="mb-stack-lg animate-fade-in">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Welcome back, John</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">You're doing great! Your vitals are stable, and you've completed 80% of today's health goals.</p>
+</section>
+<!-- Bento Grid Dashboard -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Vitals Section (7/12 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-gutter">
+<div class="bg-white rounded-lg shadow-sm p-6 border border-outline-variant/10">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-error" data-icon="vital_signs">vital_signs</span>
+                            Real-time Vitals
+                        </h3>
+<span class="px-3 py-1 bg-tertiary-container/10 text-tertiary text-xs font-bold rounded-full flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                            Live Monitoring
+                        </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
+<!-- Heart Rate -->
+<div class="p-4 rounded-xl bg-surface-container-low border border-outline-variant/20">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-label-md text-on-surface-variant">Heart Rate</span>
+<span class="material-symbols-outlined text-error text-sm" data-icon="favorite">favorite</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-3xl font-bold text-on-surface">72</span>
+<span class="text-sm text-on-surface-variant">bpm</span>
+</div>
+<div class="mt-4 h-12 w-full flex items-end gap-[2px]">
+<!-- Simulated Chart -->
+<div class="bg-error/40 w-full rounded-t-sm h-[40%]"></div>
+<div class="bg-error/40 w-full rounded-t-sm h-[60%]"></div>
+<div class="bg-error/40 w-full rounded-t-sm h-[50%]"></div>
+<div class="bg-error/40 w-full rounded-t-sm h-[70%]"></div>
+<div class="bg-error/60 w-full rounded-t-sm h-[80%]"></div>
+<div class="bg-error/40 w-full rounded-t-sm h-[50%]"></div>
+<div class="bg-error/40 w-full rounded-t-sm h-[60%]"></div>
+<div class="bg-error/60 w-full rounded-t-sm h-[75%]"></div>
+</div>
+</div>
+<!-- Blood Pressure -->
+<div class="p-4 rounded-xl bg-surface-container-low border border-outline-variant/20">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-label-md text-on-surface-variant">BP</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="blood_pressure">blood_pressure</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-3xl font-bold text-on-surface">120/80</span>
+<span class="text-sm text-on-surface-variant">mmHg</span>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-xs font-medium text-tertiary">Optimal</span>
+<div class="h-1.5 w-24 bg-outline-variant/30 rounded-full overflow-hidden">
+<div class="h-full w-[60%] bg-tertiary"></div>
+</div>
+</div>
+</div>
+<!-- O2 Levels -->
+<div class="p-4 rounded-xl bg-surface-container-low border border-outline-variant/20">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-label-md text-on-surface-variant">Oxygen Sat</span>
+<span class="material-symbols-outlined text-tertiary-container text-sm" data-icon="air">air</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-3xl font-bold text-on-surface">98</span>
+<span class="text-sm text-on-surface-variant">%</span>
+</div>
+<div class="mt-4 h-12 w-full flex items-center justify-center">
+<div class="w-full h-1 bg-gradient-to-r from-error via-tertiary to-tertiary rounded-full relative">
+<div class="absolute right-[5%] -top-1 w-3 h-3 bg-white border-2 border-tertiary rounded-full shadow-sm"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Appointments Section -->
+<div class="bg-white rounded-lg shadow-sm p-6 border border-outline-variant/10">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="event_available">event_available</span>
+                            Upcoming Appointments
+                        </h3>
+<button class="text-primary font-label-md hover:underline">View All</button>
+</div>
+<div class="space-y-4">
+<!-- Appt 1 -->
+<div class="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-xl bg-surface hover:bg-surface-container-low transition-all border border-outline-variant/10">
+<div class="flex items-center gap-4 mb-4 md:mb-0">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="medical_services">medical_services</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-bold text-on-surface">Cardiology Follow-up</p>
+<p class="text-sm text-on-surface-variant">Dr. Sarah Wilson • Tomorrow, 10:30 AM</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md flex items-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm" data-icon="videocam">videocam</span>
+                                    Join Call
+                                </button>
+<button class="px-4 py-2 border border-outline text-on-surface-variant rounded-lg font-label-md hover:bg-surface-container-high transition-colors">Details</button>
+</div>
+</div>
+<!-- Appt 2 -->
+<div class="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-xl bg-surface hover:bg-surface-container-low transition-all border border-outline-variant/10">
+<div class="flex items-center gap-4 mb-4 md:mb-0">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-outline" data-icon="lab_research">lab_research</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-bold text-on-surface">Routine Blood Test</p>
+<p class="text-sm text-on-surface-variant">MedTech Central Lab • Oct 24, 08:00 AM</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 border border-outline text-on-surface-variant rounded-lg font-label-md hover:bg-surface-container-high transition-colors">Details</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Column (Medications & Goals) -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<!-- Medications -->
+<div class="bg-white rounded-lg shadow-sm p-6 border border-outline-variant/10">
+<h3 class="font-headline-sm text-headline-sm flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="pill">pill</span>
+                        Daily Medications
+                    </h3>
+<div class="space-y-4">
+<label class="flex items-center justify-between p-3 rounded-xl border border-outline-variant/20 bg-surface-container-lowest cursor-pointer hover:border-primary/50 transition-colors">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/5 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="medication">medication</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Lisinopril 10mg</p>
+<p class="text-xs text-on-surface-variant">Once daily, morning</p>
+</div>
+</div>
+<input checked="" class="w-6 h-6 rounded-full border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-3 rounded-xl border border-outline-variant/20 bg-surface-container-lowest cursor-pointer hover:border-primary/50 transition-colors">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/5 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="medication">medication</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Atorvastatin 20mg</p>
+<p class="text-xs text-on-surface-variant">Once daily, evening</p>
+</div>
+</div>
+<input class="w-6 h-6 rounded-full border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-3 rounded-xl border border-outline-variant/20 bg-surface-container-lowest cursor-pointer hover:border-primary/50 transition-colors">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/5 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="medication">medication</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Omega-3 Supplement</p>
+<p class="text-xs text-on-surface-variant">Twice daily</p>
+</div>
+</div>
+<input class="w-6 h-6 rounded-full border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</label>
+</div>
+</div>
+<!-- Health Goals -->
+<div class="bg-white rounded-lg shadow-sm p-6 border border-outline-variant/10">
+<h3 class="font-headline-sm text-headline-sm flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-tertiary" data-icon="mountain_flag">mountain_flag</span>
+                        Health Goals
+                    </h3>
+<div class="space-y-6">
+<!-- Steps -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="steps">steps</span>
+<span class="text-sm font-medium">Daily Steps</span>
+</div>
+<span class="text-xs font-bold text-primary">8,432 / 10k</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 84%"></div>
+</div>
+</div>
+<!-- Water -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="water_drop">water_drop</span>
+<span class="text-sm font-medium">Hydration</span>
+</div>
+<span class="text-xs font-bold text-tertiary">1.8 / 2.5 L</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 72%"></div>
+</div>
+</div>
+<!-- Sleep -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="bedtime">bedtime</span>
+<span class="text-sm font-medium">Sleep Quality</span>
+</div>
+<span class="text-xs font-bold text-secondary">7.5 / 8 hrs</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 93%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Emergency Card -->
+<div class="bg-error-container p-6 rounded-lg flex items-start gap-4">
+<span class="material-symbols-outlined text-error" data-icon="emergency">emergency</span>
+<div>
+<p class="font-bold text-on-error-container">Emergency SOS</p>
+<p class="text-sm text-on-error-container/80 mb-3">Instantly notify your care team and emergency contacts.</p>
+<button class="bg-error text-on-error px-4 py-2 rounded-lg font-bold text-sm active:scale-95 transition-transform">Activate SOS</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Bar (Shared Component - Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 md:hidden bg-surface dark:bg-inverse-surface shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] flex justify-around items-center h-16 pb-safe">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1 scale-105 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-sm text-label-sm">Schedule</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+<span class="font-label-sm text-label-sm">Records</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for vitals update
+        setInterval(() => {
+            const hrElement = document.querySelector('.text-3xl.font-bold');
+            if (hrElement) {
+                const current = parseInt(hrElement.innerText);
+                const variance = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+                hrElement.innerText = (current + variance).toString();
+            }
+        }, 3000);
+
+        // Simple smooth scroll for nav
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body></html>

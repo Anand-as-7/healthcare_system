@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | MediAI Healthcare</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body>
+
+  <main class="auth-page">
+    <section class="auth-card">
+
+      <!-- LEFT IMAGE AREA -->
+      <div class="auth-left">
+        <img src="{% static 'images/l1.jpg' %}" alt="Healthcare Login" class="doctor-img">
+
+        <div class="image-overlay"></div>
+
+        <div class="left-content">
+          <div class="logo-row">
+            <div class="logo-icon">
+              <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <h2>MEDCARE</h2>
+          </div>
+
+          <p>
+            Empowering Healthcare, One Click At A Time.<br>
+            Your Health, Your Records, Your Control.
+          </p>
+        </div>
+      </div>
+
+      <!-- RIGHT FORM AREA -->
+      <div class="auth-right">
+        <div class="login-box">
+
+          
+
+          <h1>Login</h1>
+          <p class="subtitle">Log in to your account</p>
+
+          <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <div class="input-wrap">
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <div class="input-wrap password-wrap">
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  required
+                >
+                <i class="fa-regular fa-eye-slash"></i>
+              </div>
+            </div>
+
+            <div class="forgot-row">
+              <a href="#">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="login-btn">Log In</button>
+
+            <button type="button" class="google-btn">
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+              Log in with Google
+            </button>
+          </form>
+
+          <p class="signup-text">
+            Don't have an account?
+            <a href="#">Sign Up</a>
+          </p>
+
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+</body>
+</html>

@@ -6,8 +6,8 @@ from django.contrib import messages
 # Create your views here.
 
 
-def patient_dashboard(request):
-    return render(request,'patient_dashboard.html')
+def user_dashboard(request):
+    return render(request,'user_dashboard.html')
 
 def doctor_dashboard(request):
     return render(request,'doctor_dashboard.html')

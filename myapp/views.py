@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from .models import *
 from .forms import *
 from django.contrib import messages
@@ -26,11 +26,9 @@ def admin_dashboard(request):
     return render(request,'admin_dashboard.html')
 
 
-
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth.hashers import check_password
-from .models import Login
+def logout_user(request):
+    request.session.flush()
+    return redirect('loginpage')
 
 
 def loginpage(request):
@@ -149,3 +147,29 @@ def hospital_register(request):
 
     return render(request, 'hospital_register.html', {'form': form,'form2': form2})
 
+
+def adminusersview(request):
+    a=User.objects.all().order_by('-id')
+    return render(request,'adminusersview.html',{'a':a})
+
+def adminhospitalsview(request):
+    a=Hospital.objects.all().order_by('-id')
+    return render(request,'adminhospitalsview.html',{'a':a})
+
+def admindoctorsview(request):
+    a=Doctor.objects.all().order_by('-id')
+    return render(request,'admindoctorsview.html',{'a':a})
+
+
+def approve_hospital(request,id):
+    hospital=get_object_or_404(Login,id=id)
+    hospital.status = 1
+    hospital.save()
+    return redirect('adminhospitalsview')
+
+
+def reject_hospital(request,id):
+    hospital=get_object_or_404(Login,id=id)
+    hospital.status = 2
+    hospital.save()
+    return redirect('adminhospitalsview')

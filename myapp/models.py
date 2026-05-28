@@ -68,3 +68,36 @@ class Doctor(models.Model):
 
 
 
+class Appointment(models.Model):
+    date = models.DateField()
+    time = models.TimeField()
+    userid = models.ForeignKey(User, on_delete=models.CASCADE)
+    doctorid = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    payment_status = models.IntegerField(default=0)
+    cancel_status = models.IntegerField(default=0)
+    refund_status = models.IntegerField(default=0)
+
+   
+
+class slot(models.Model):
+    d_id = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    h_id = models.ForeignKey(Hospital, on_delete=models.CASCADE,null=True)
+
+    slot_date = models.DateField(null=True, blank=True)
+    weekday = models.IntegerField(null=True, blank=True)  # 0=Mon ... 6=Sun
+
+    starttime = models.TimeField()
+    endtime = models.TimeField()
+
+    break_start = models.TimeField(null=True, blank=True)
+    break_end = models.TimeField(null=True, blank=True)
+
+    currentdate = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            # Prevent duplicates for weekly schedule entries
+            models.UniqueConstraint(fields=["d_id", "weekday"], name="uniq_doctor_weekday_slot"),
+            # Prevent duplicates for date-specific entries
+            models.UniqueConstraint(fields=["d_id", "slot_date"], name="uniq_doctor_date_slot"),
+        ]

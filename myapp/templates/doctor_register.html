@@ -1,17 +1,343 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>MedTech Global | Doctor Registration</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link href="{% static 'css/hospital.css' %}" rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#00525a",
+            "on-tertiary-container": "#82edfc",
+            "on-primary-fixed-variant": "#003dab",
+            "on-background": "#151c27",
+            "inverse-surface": "#2a313d",
+            "on-primary-container": "#d4dcff",
+            "primary-fixed": "#dbe1ff",
+            "surface-tint": "#1353d8",
+            "surface-container-highest": "#dce2f3",
+            "primary-fixed-dim": "#b5c4ff",
+            "on-secondary-fixed": "#25005a",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed": "#00174d",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "on-tertiary": "#ffffff",
+            "background": "#f9f9ff",
+            "surface-container-high": "#e2e8f8",
+            "on-tertiary-fixed-variant": "#004f57",
+            "on-tertiary-fixed": "#001f23",
+            "tertiary-container": "#006c77",
+            "surface-dim": "#d3daea",
+            "inverse-primary": "#b5c4ff",
+            "on-error": "#ffffff",
+            "error": "#ba1a1a",
+            "secondary-fixed": "#eaddff",
+            "surface-bright": "#f9f9ff",
+            "on-surface": "#151c27",
+            "on-surface-variant": "#434654",
+            "secondary-fixed-dim": "#d2bbff",
+            "tertiary-fixed": "#92f1ff",
+            "surface": "#f9f9ff",
+            "secondary-container": "#8b4aff",
+            "inverse-on-surface": "#ebf1ff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed-dim": "#6ad6e5",
+            "primary-container": "#1a56db",
+            "secondary": "#7127e5",
+            "surface-variant": "#dce2f3",
+            "on-secondary-container": "#fffbff",
+            "primary": "#003fb1",
+            "outline-variant": "#c3c5d7",
+            "on-secondary-fixed-variant": "#5a00c6",
+            "outline": "#737686",
+            "on-error-container": "#93000a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "section-padding": "64px",
+            "margin-desktop": "48px",
+            "stack-sm": "8px",
+            "stack-md": "16px",
+            "gutter": "24px",
+            "container-max": "1440px",
+            "margin-mobile": "16px",
+            "unit": "8px",
+            "stack-lg": "32px"
+          },
+          "fontFamily": { "body-sm": ["Inter"], "display-lg": ["Inter"], "label-md": ["Inter"], "label-sm": ["Inter"], "headline-lg-mobile": ["Inter"], "headline-sm": ["Inter"], "body-md": ["Inter"], "headline-lg": ["Inter"], "headline-md": ["Inter"], "body-lg": ["Inter"] },
+          "fontSize": {
+            "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .doctor-register-form input[type="text"],
+    .doctor-register-form input[type="email"],
+    .doctor-register-form input[type="password"],
+    .doctor-register-form input[type="number"],
+    .doctor-register-form input[type="date"],
+    .doctor-register-form textarea,
+    .doctor-register-form select {
+      width: 100%;
+      border: 1px solid #c3c5d7;
+      border-radius: 0.75rem;
+      background: #ffffff;
+      color: #151c27;
+      padding: 0.75rem 0.875rem;
+      font-size: 0.95rem;
+      line-height: 1.25rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .doctor-register-form input:focus,
+    .doctor-register-form textarea:focus,
+    .doctor-register-form select:focus {
+      border-color: #003fb1;
+      box-shadow: 0 0 0 3px rgba(0, 63, 177, 0.12);
+      outline: none;
+    }
+
+    .doctor-register-form input[type="file"] {
+      width: 100%;
+      border: 1px dashed #c3c5d7;
+      border-radius: 0.75rem;
+      background: #f9f9ff;
+      padding: 0.5rem;
+      color: #434654;
+    }
+
+    .doctor-register-form ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .doctor-register-form li label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      color: #151c27;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body>
-    <form method="post" action="">
-        {% csrf_token %}
-        {{form.as_p}}
-        {{form2.as_p}}
-    <input type="submit" value="Register">
-    </form>
-    
+<body class="bg-background text-on-background min-h-screen">
+  <header
+    class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 flex justify-between items-center h-16 px-16 md:px-12 w-full">
+    <div class="flex items-center gap-stack-sm">
+      <span class="material-symbols-outlined text-primary text-3xl" data-icon="monitor_heart">monitor_heart</span>
+      <span
+        class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed tracking-tight">MedTech
+        Global</span>
+    </div>
+    <div class="flex items-center gap-stack-md">
+      <button
+        class="p-2 rounded-full hover:bg-surface-container-high/50 transition-colors active:scale-95 duration-200">
+        <span class="material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+      </button>
+      <button
+        class="p-2 rounded-full hover:bg-surface-container-high/50 transition-colors active:scale-95 duration-200 relative">
+        <span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+      <div class="hidden md:flex items-center gap-stack-sm ml-4">
+        <img alt="Admin User" class="w-8 h-8 rounded-full border border-outline-variant"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzU_GGqI3GsEem4MYg1AEarEk2Wk6FMa8QueIacOUnTuT-0Q2f34UBsSHst8kI4Q_EMQw_LcaVuEXTyQHRFAf1_vcTXKlPgMdDl6lGq2cf7T9EBAyxmDKn3DVGfLUhd9Bw29n9R9ZLhNpuIgZXOza9XWEvoskqeFiziNMQm3Z7Vr7xKt7Y7riwWex2nJkFGTDwxa824gxgqxXeh7jQA9WZROAUDArHAx77mGPAFtzdz_IR2yeq8DBRSZQOi4YyAoxFFBt_ppG-15xh" />
+        <span class="font-label-md text-label-md text-on-surface">Admin</span>
+      </div>
+    </div>
+  </header>
+  <aside
+    class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low dark:bg-inverse-surface border-r border-outline-variant/20 pt-20">
+    <nav class="flex flex-col gap-1 px-4">
+      <a class="flex items-center gap-stack-md py-3 px-4 text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant/10 transition-colors"
+        href="{% url 'hospital_dashboard' %}">
+        <span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+        <span class="font-body-md text-body-md">Dashboard</span>
+      </a>
+      <div>
+        <button aria-controls="doctorsDropdown" aria-expanded="true"
+          class="hospital-dropdown-toggle w-full flex items-center justify-between gap-stack-md py-3 px-4 text-primary dark:text-primary-fixed font-bold border-r-4 border-primary dark:border-primary-fixed bg-primary/5 transition-colors text-left"
+          type="button">
+          <span class="flex items-center gap-stack-md">
+            <span class="material-symbols-outlined" data-icon="group_add">group_add</span>
+            <span class="font-body-md text-body-md">Doctors</span>
+          </span>
+          <span class="material-symbols-outlined transition-transform duration-200" data-icon="expand_more"
+            style="transform: rotate(180deg);">expand_more</span>
+        </button>
+        <div class="hospital-dropdown-menu pl-8 pr-2 pb-2 flex flex-col gap-1" id="doctorsDropdown">
+          <a class="flex items-center gap-stack-md py-2 px-3 rounded-lg bg-primary/10 text-primary font-semibold transition-colors"
+            href="{% url 'doctor_register' %}">
+            <span class="material-symbols-outlined text-[20px]" data-icon="person_add">person_add</span>
+            <span class="font-body-sm text-body-sm">Add Doctors</span>
+          </a>
+          <a class="flex items-center gap-stack-md py-2 px-3 rounded-lg text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant/10 transition-colors"
+            href="">
+            <span class="material-symbols-outlined text-[20px]" data-icon="badge">badge</span>
+            <span class="font-body-sm text-body-sm">View Doctors</span>
+          </a>
+        </div>
+      </div>
+      <a class="flex items-center gap-stack-md py-3 px-4 text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant/10 transition-colors"
+        href="{% url 'logout' %}">
+        <span class="material-symbols-outlined" data-icon="logout">logout</span>
+        <span class="font-body-md text-body-md">Logout</span>
+      </a>
+    </nav>
+    <div class="mt-auto p-4 border-t border-outline-variant/10">
+      <div class="bg-primary/5 rounded-xl p-4">
+        <span class="text-xs font-bold text-primary uppercase tracking-wider block mb-1">System Status</span>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          <span class="text-xs text-on-surface-variant">All Systems Nominal</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="md:pl-64 pt-20 pb-24 md:pb-8 px-margin-mobile md:px-margin-desktop">
+    <div class="max-w-container-max mx-auto flex flex-col gap-stack-lg">
+      <section
+        class="bg-white dark:bg-inverse-surface p-8 rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] border border-outline-variant/10">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+          <div>
+            <h1 class="font-headline-md text-headline-md text-on-surface">Doctor Registration</h1>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">Add a new doctor profile under your hospital.</p>
+          </div>
+        </div>
+
+        {% if messages %}
+        <div class="mb-6 space-y-3">
+          {% for message in messages %}
+          <div class="rounded-lg px-4 py-3 text-sm {% if message.tags == 'success' %}bg-green-100 text-green-800{% elif message.tags == 'error' %}bg-error-container text-on-error-container{% else %}bg-surface-container text-on-surface{% endif %}">
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <form class="doctor-register-form" method="post" action="" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+          <div class="mb-4 text-sm text-error">
+            {{ form.non_field_errors }}
+          </div>
+          {% endif %}
+          {% if form2.non_field_errors %}
+          <div class="mb-4 text-sm text-error">
+            {{ form2.non_field_errors }}
+          </div>
+          {% endif %}
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-on-surface mb-2" for="{{ form.doctor_name.id_for_label }}">Doctor Name</label>
+              {{ form.doctor_name }}
+              {% if form.doctor_name.errors %}<p class="mt-1 text-xs text-error">{{ form.doctor_name.errors|striptags }}</p>{% endif %}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-on-surface mb-2" for="{{ form.photo.id_for_label }}">Photo</label>
+              {{ form.photo }}
+              {% if form.photo.errors %}<p class="mt-1 text-xs text-error">{{ form.photo.errors|striptags }}</p>{% endif %}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-on-surface mb-2">Gender</label>
+              {{ form.gender }}
+              {% if form.gender.errors %}<p class="mt-1 text-xs text-error">{{ form.gender.errors|striptags }}</p>{% endif %}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-on-surface mb-2" for="{{ form.dob.id_for_label }}">Date Of Birth</label>
+              {{ form.dob }}
+              {% if form.dob.errors %}<p class="mt-1 text-xs text-error">{{ form.dob.errors|striptags }}</p>{% endif %}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-on-surface mb-2" for="{{ form.specialization.id_for_label }}">Specialization</label>
+              {{ form.specialization }}
+              {% if form.specialization.errors %}<p class="mt-1 text-xs text-error">{{ form.specialization.errors|striptags }}</p>{% endif %}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-on-surface mb-2" for="{{ form.experience.id_for_label }}">Experience</label>
+              {{ form.experience }}
+              {% if form.experience.errors %}<p class="mt-1 text-xs text-error">{{ form.experience.errors|striptags }}</p>{% endif %}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-on-surface mb-2" for="{{ form.consultation_fee.id_for_label }}">Consultation Fee</label>
+              {{ form.consultation_fee }}
+              {% if form.consultation_fee.errors %}<p class="mt-1 text-xs text-error">{{ form.consultation_fee.errors|striptags }}</p>{% endif %}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-on-surface mb-2" for="{{ form.contact.id_for_label }}">Contact</label>
+              {{ form.contact }}
+              {% if form.contact.errors %}<p class="mt-1 text-xs text-error">{{ form.contact.errors|striptags }}</p>{% endif %}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-on-surface mb-2" for="{{ form2.email.id_for_label }}">Email</label>
+              {{ form2.email }}
+              {% if form2.email.errors %}<p class="mt-1 text-xs text-error">{{ form2.email.errors|striptags }}</p>{% endif %}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-on-surface mb-2" for="{{ form2.password.id_for_label }}">Password</label>
+              {{ form2.password }}
+              {% if form2.password.errors %}<p class="mt-1 text-xs text-error">{{ form2.password.errors|striptags }}</p>{% endif %}
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <button
+              class="px-6 py-3 bg-primary text-white font-label-md text-label-md rounded-lg shadow-sm hover:bg-on-primary-fixed-variant active:scale-95 transition-all"
+              type="submit">Register Doctor</button>
+            <a class="px-6 py-3 border border-outline text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container-high transition-colors"
+              href="{% url 'hospital_dashboard' %}">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script src="{% static 'js/hospital.js' %}"></script>
 </body>
 </html>

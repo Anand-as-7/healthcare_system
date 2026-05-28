@@ -135,30 +135,21 @@
 </div>
 </div>
 <nav class="flex flex-col gap-1 px-3">
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors" href="#">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors" href="{% url 'user_dashboard' %}">
 <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
 <span class="font-body-md text-body-md">Home</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'userdoctorsview' %}">
 <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
-<span class="font-body-md text-body-md">Schedule</span>
+<span class="font-body-md text-body-md">Book Appointment</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}#appointments">
 <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
-<span class="font-body-md text-body-md">Records</span>
+<span class="font-body-md text-body-md">View Appointments</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
-<span class="font-body-md text-body-md">Profile</span>
-</a>
-<div class="my-4 border-t border-outline-variant/10"></div>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="settings">settings</span>
-<span class="font-body-md text-body-md">Settings</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
-<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
-<span class="font-body-md text-body-md">Support</span>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'logout' %}">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
 </a>
 </nav>
 </aside>
@@ -173,7 +164,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
 <!-- Vitals Section (7/12 cols) -->
 <div class="lg:col-span-8 flex flex-col gap-gutter">
-<div class="bg-white rounded-lg shadow-sm p-6 border border-outline-variant/10">
+<div class="bg-white rounded-lg shadow-sm p-6 border border-outline-variant/10" id="appointments">
 <div class="flex justify-between items-center mb-6">
 <h3 class="font-headline-sm text-headline-sm flex items-center gap-2">
 <span class="material-symbols-outlined text-error" data-icon="vital_signs">vital_signs</span>

@@ -1,0 +1,437 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Book Appointment - MedTech Global</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="{% static 'css/user.css' %}" rel="stylesheet" />
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            tertiary: "#00525a",
+            "on-tertiary-container": "#82edfc",
+            "on-primary-fixed-variant": "#003dab",
+            "on-background": "#151c27",
+            "inverse-surface": "#2a313d",
+            "on-primary-container": "#d4dcff",
+            "primary-fixed": "#dbe1ff",
+            "surface-tint": "#1353d8",
+            "surface-container-highest": "#dce2f3",
+            "primary-fixed-dim": "#b5c4ff",
+            "on-secondary-fixed": "#25005a",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed": "#00174d",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "on-tertiary": "#ffffff",
+            background: "#f9f9ff",
+            "surface-container-high": "#e2e8f8",
+            "on-tertiary-fixed-variant": "#004f57",
+            "on-tertiary-fixed": "#001f23",
+            "tertiary-container": "#006c77",
+            "surface-dim": "#d3daea",
+            "inverse-primary": "#b5c4ff",
+            "on-error": "#ffffff",
+            error: "#ba1a1a",
+            "secondary-fixed": "#eaddff",
+            "surface-bright": "#f9f9ff",
+            "on-surface": "#151c27",
+            "on-surface-variant": "#434654",
+            "secondary-fixed-dim": "#d2bbff",
+            "tertiary-fixed": "#92f1ff",
+            surface: "#f9f9ff",
+            "secondary-container": "#8b4aff",
+            "inverse-on-surface": "#ebf1ff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed-dim": "#6ad6e5",
+            "primary-container": "#1a56db",
+            secondary: "#7127e5",
+            "surface-variant": "#dce2f3",
+            "on-secondary-container": "#fffbff",
+            primary: "#003fb1",
+            "outline-variant": "#c3c5d7",
+            outline: "#737686",
+            "on-error-container": "#93000a"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "16px",
+            xl: "24px",
+            full: "9999px"
+          },
+          spacing: {
+            "section-padding": "64px",
+            "margin-desktop": "48px",
+            "stack-sm": "8px",
+            "stack-md": "16px",
+            gutter: "24px",
+            "container-max": "1440px",
+            "margin-mobile": "16px",
+            unit: "8px",
+            "stack-lg": "32px"
+          },
+          fontFamily: {
+            "body-sm": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .calendar-day.is-selected {
+      background: #003fb1;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 0 0 2px rgba(0, 63, 177, 0.15);
+    }
+
+    .calendar-day.is-disabled {
+      color: #b7bac8;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+{% now "Y-m-d" as today_date %}
+
+<body class="bg-background text-on-surface min-h-screen">
+  <header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-stack-sm">
+      <span class="material-symbols-outlined text-primary">monitor_heart</span>
+      <h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">MedTech Global</h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high/50 p-2 rounded-full transition-colors active:scale-95 duration-200">notifications</button>
+      <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+        <img alt="Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCt3S6WN7tgrgDn6SKQHPQo5n-9ivlUNSnjv-uyYCnSJaEn_vxzJxEDgpApFqirHqaQFFQqFC_Lnry3CYz3_D3Rgu3q3T3uCmWUHW1nBkeI_EkDaPJZskWp-CeBaAHpf3mPz-ogPRlTgoBuBD_7PJP2gEdR2QlBPBY9MzF16X4oG_MkOsYdof-Qh8uHHwjKe692xdYIY5RJxCkw9RDIC43hEMj2WrC15cnwmTe_8Sp6nUetqSKnmFevlKs3NRqVU_q4RTlueqYZZuqZ" />
+      </div>
+    </div>
+  </header>
+
+  <aside class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant/20 pt-16 z-40">
+    <div class="p-6 flex items-center gap-4 border-b border-outline-variant/10 mb-4">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+        <span class="material-symbols-outlined">account_circle</span>
+      </div>
+      <div>
+        <p class="font-label-md text-label-md text-on-surface font-bold">John Doe</p>
+        <p class="text-xs text-on-surface-variant">Patient ID: #MT-8821</p>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-1 px-3">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="font-body-md text-body-md">Home</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors" href="{% url 'userdoctorsview' %}">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="font-body-md text-body-md">Book Appointment</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}#appointments">
+        <span class="material-symbols-outlined">assignment_ind</span>
+        <span class="font-body-md text-body-md">View Appointments</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'logout' %}">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="font-body-md text-body-md">Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="pt-24 pb-32 md:pb-28 md:pl-72 px-margin-mobile md:px-margin-desktop transition-all duration-300">
+    <div class="max-w-container-max mx-auto grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+      <section class="xl:col-span-5 flex flex-col gap-stack-md">
+        <div class="glass-card rounded-xl shadow-sm p-5 border border-outline-variant/30">
+          <div class="flex items-center gap-4">
+            <div class="w-24 h-24 rounded-xl overflow-hidden shadow-sm bg-surface-container-high flex items-center justify-center">
+              {% if doctor.photo %}
+              <img src="{{ doctor.photo.url }}" alt="{{ doctor.doctor_name }}" class="w-full h-full object-cover" />
+              {% else %}
+              <span class="material-symbols-outlined text-6xl text-primary/40">account_circle</span>
+              {% endif %}
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-tertiary-container/10 text-on-tertiary-fixed-variant px-2 py-0.5 rounded-full font-label-sm">{{ doctor.specialization }}</span>
+                <div class="flex items-center text-secondary">
+                  <span class="material-symbols-outlined text-[16px]" style="font-variation-settings:'FILL' 1;">star</span>
+                  <span class="font-label-md ml-1">4.9</span>
+                </div>
+              </div>
+              <h2 class="font-headline-md text-headline-md mt-1">{{ doctor.doctor_name }}</h2>
+              <p class="font-body-md text-body-md text-on-surface-variant">{{ doctor.hospitalid.hospital_name }}</p>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-outline-variant/30 grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-on-surface-variant">Experience</p>
+              <p class="font-headline-sm">{{ doctor.experience }}</p>
+            </div>
+            <div>
+              <p class="text-on-surface-variant">Contact</p>
+              <p class="font-headline-sm">{{ doctor.contact }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-container rounded-xl p-5 border border-outline-variant/20">
+          <h3 class="font-label-md uppercase tracking-wider text-on-surface-variant mb-3">Consultation Details</h3>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary">videocam</span>
+              </div>
+              <div>
+                <p class="font-label-md">Video Consultation</p>
+                <p class="font-body-sm text-on-surface-variant">30 Minutes duration</p>
+              </div>
+            </div>
+            <span class="font-headline-sm text-primary">Rs. {{ doctor.consultation_fee }}</span>
+          </div>
+          <p class="font-body-sm text-on-surface-variant italic">Hospital: {{ doctor.hospitalid.hospital_name }}</p>
+        </div>
+      </section>
+
+      <section class="xl:col-span-7 flex flex-col gap-stack-md">
+        <div class="glass-card rounded-xl shadow-sm border border-outline-variant/30 p-5">
+          <div class="flex items-center justify-between mb-5">
+            <h3 class="font-headline-sm">Select Date</h3>
+            <div class="flex items-center gap-2">
+              <button id="prevMonthBtn" type="button" class="w-8 h-8 rounded-full hover:bg-surface-container-high flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-surface-variant">chevron_left</span>
+              </button>
+              <span id="calendarMonthLabel" class="font-label-md text-label-md min-w-[140px] text-center"></span>
+              <button id="nextMonthBtn" type="button" class="w-8 h-8 rounded-full hover:bg-surface-container-high flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+              </button>
+            </div>
+          </div>
+
+          <form id="calendarForm" method="GET" action="{% url 'bookappointment' doctor.id %}">
+            <input type="hidden" id="calendarDate" name="date" value="{{ selected_date|default:today_date }}" />
+          </form>
+
+          <div class="grid grid-cols-7 text-center gap-2 text-on-surface-variant mb-2">
+            <div class="font-label-sm">Mo</div>
+            <div class="font-label-sm">Tu</div>
+            <div class="font-label-sm">We</div>
+            <div class="font-label-sm">Th</div>
+            <div class="font-label-sm">Fr</div>
+            <div class="font-label-sm">Sa</div>
+            <div class="font-label-sm">Su</div>
+          </div>
+          <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
+        </div>
+
+        <div class="glass-card rounded-xl shadow-sm border border-outline-variant/30 p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-headline-sm">Available Slots</h3>
+            <span class="font-label-md text-label-md text-on-surface-variant"><span id="slotCount">{{ slots|length }}</span> slots found</span>
+          </div>
+
+          {% if form.time.errors or form.non_field_errors %}
+          <div class="mb-4 rounded-lg bg-error-container/70 border border-red-200 p-3 text-on-error-container text-sm">
+            {% for err in form.time.errors %}<p>{{ err }}</p>{% endfor %}
+            {% for err in form.non_field_errors %}<p>{{ err }}</p>{% endfor %}
+          </div>
+          {% endif %}
+
+          <form id="appointmentForm" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="date" id="appointmentDate" value="{{ selected_date|default:today_date }}" />
+            <input type="hidden" name="time" id="selectedTimeInput" />
+
+            <div class="space-y-5">
+              <div>
+                <p class="font-label-md text-label-md text-on-surface-variant mb-3 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[18px]">light_mode</span>
+                  Morning
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {% for s in slots %}
+                  {% if s.label|slice:"-2:" == "AM" %}
+                  {% if s.disabled %}
+                  <button type="button" disabled class="border border-outline-variant/30 py-2.5 px-4 rounded-xl text-center font-label-md text-label-md text-on-surface-variant/30 cursor-not-allowed bg-surface-container-low">
+                    {{ s.label }}
+                  </button>
+                  {% else %}
+                  <button type="button" class="slot-btn border border-outline-variant py-2.5 px-4 rounded-xl text-center font-label-md text-label-md hover:border-primary hover:bg-primary/5 transition-all" data-time="{{ s.value }}" data-label="{{ s.label }}">
+                    {{ s.label }}
+                  </button>
+                  {% endif %}
+                  {% endif %}
+                  {% empty %}
+                  <p class="text-sm text-on-surface-variant col-span-3">No slots available.</p>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div>
+                <p class="font-label-md text-label-md text-on-surface-variant mb-3 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[18px]">sunny</span>
+                  Afternoon
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {% for s in slots %}
+                  {% if s.label|slice:"-2:" == "PM" %}
+                  {% if s.disabled %}
+                  <button type="button" disabled class="border border-outline-variant/30 py-2.5 px-4 rounded-xl text-center font-label-md text-label-md text-on-surface-variant/30 cursor-not-allowed bg-surface-container-low">
+                    {{ s.label }}
+                  </button>
+                  {% else %}
+                  <button type="button" class="slot-btn border border-outline-variant py-2.5 px-4 rounded-xl text-center font-label-md text-label-md hover:border-primary hover:bg-primary/5 transition-all" data-time="{{ s.value }}" data-label="{{ s.label }}">
+                    {{ s.label }}
+                  </button>
+                  {% endif %}
+                  {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+
+              {% if not slots %}
+              <p class="text-sm text-on-surface-variant">No slots available for this date.</p>
+              {% endif %}
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="fixed bottom-0 left-0 right-0 w-full z-40 bg-surface border-t border-outline-variant shadow-lg">
+    <div class="h-20 pb-safe px-margin-mobile md:px-margin-desktop md:pl-72 flex items-center justify-between gap-4">
+      <div class="hidden sm:flex flex-col">
+        <span class="font-label-sm text-label-sm text-on-surface-variant">Selected Appointment</span>
+        <p id="selectedSummary" class="font-label-md text-label-md text-primary">No slot selected</p>
+      </div>
+      <button id="confirmBtn" type="submit" form="appointmentForm" disabled
+        class="flex-grow sm:flex-grow-0 sm:min-w-[240px] h-12 bg-primary text-on-primary rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-2 active:scale-95 duration-150 shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+        Confirm Appointment
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </button>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const today = new Date("{{ today_date }}T00:00:00");
+      const selectedRaw = "{{ selected_date|default:today_date }}";
+      const selectedDate = new Date(selectedRaw + "T00:00:00");
+      let viewMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+
+      const grid = document.getElementById("calendarGrid");
+      const monthLabel = document.getElementById("calendarMonthLabel");
+      const calendarDateInput = document.getElementById("calendarDate");
+      const appointmentDateInput = document.getElementById("appointmentDate");
+      const calendarForm = document.getElementById("calendarForm");
+
+      function fmt(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        return y + "-" + m + "-" + d;
+      }
+
+      function renderCalendar() {
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        monthLabel.textContent = monthNames[viewMonth.getMonth()] + " " + viewMonth.getFullYear();
+        grid.innerHTML = "";
+
+        const firstDay = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 1);
+        const lastDay = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 0);
+        const startOffset = (firstDay.getDay() + 6) % 7;
+
+        for (let i = 0; i < startOffset; i++) {
+          const blank = document.createElement("div");
+          blank.className = "h-10";
+          grid.appendChild(blank);
+        }
+
+        for (let d = 1; d <= lastDay.getDate(); d++) {
+          const dayDate = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), d);
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "calendar-day h-10 w-full rounded-lg font-body-md hover:bg-surface-container transition-colors";
+          btn.textContent = d;
+
+          const isPast = dayDate < today;
+          const isSelected = fmt(dayDate) === fmt(selectedDate);
+
+          if (isPast) {
+            btn.classList.add("is-disabled");
+            btn.disabled = true;
+          }
+          if (isSelected) {
+            btn.classList.add("is-selected");
+          }
+
+          if (!isPast) {
+            btn.addEventListener("click", function () {
+              const val = fmt(dayDate);
+              calendarDateInput.value = val;
+              appointmentDateInput.value = val;
+              calendarForm.submit();
+            });
+          }
+          grid.appendChild(btn);
+        }
+      }
+
+      document.getElementById("prevMonthBtn").addEventListener("click", function () {
+        viewMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() - 1, 1);
+        renderCalendar();
+      });
+
+      document.getElementById("nextMonthBtn").addEventListener("click", function () {
+        viewMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 1);
+        renderCalendar();
+      });
+
+      renderCalendar();
+
+      const slotButtons = document.querySelectorAll(".slot-btn");
+      const selectedTimeInput = document.getElementById("selectedTimeInput");
+      const selectedSummary = document.getElementById("selectedSummary");
+      const confirmBtn = document.getElementById("confirmBtn");
+
+      slotButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          slotButtons.forEach((b) => b.classList.remove("bg-primary-container", "text-on-primary-container", "border-primary", "shadow-sm", "font-bold"));
+          btn.classList.add("bg-primary-container", "text-on-primary-container", "border-primary", "shadow-sm", "font-bold");
+          selectedTimeInput.value = btn.dataset.time;
+          selectedSummary.textContent = new Date(appointmentDateInput.value + "T00:00:00").toLocaleDateString("en-US", {
+            month: "short", day: "numeric", year: "numeric"
+          }) + " at " + btn.dataset.label;
+          confirmBtn.disabled = false;
+        });
+      });
+    })();
+  </script>
+</body>
+
+</html>

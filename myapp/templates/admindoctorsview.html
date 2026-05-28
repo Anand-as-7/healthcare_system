@@ -221,7 +221,7 @@
 
                 <div class="overflow-x-auto">
                     <table class="w-full js-admin-datatable" id="doctorsTable" data-entity-label="Doctors"
-                        data-nowrap-targets="0,3,4,6,7,8">
+                        data-nowrap-targets="0,3,4,6,7,8" data-column-widths="80px,260px,230px,120px,140px,180px,130px,120px,150px,320px">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -241,7 +241,7 @@
                             <tr>
                                 <td>#{{ i.id }}</td>
                                 <td class="font-semibold text-on-surface">
-                                    <div class="flex items-center gap-3">
+                                    <div class="doctor-cell flex items-center gap-3">
                                         {% if i.photo %}
                                         <img src="{{ i.photo.url }}" alt="{{ i.doctor_name }}"
                                             class="w-10 h-10 rounded-full object-cover border border-outline-variant/40" />
@@ -250,7 +250,7 @@
                                             class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">
                                             DR</div>
                                         {% endif %}
-                                        <span>{{ i.doctor_name }}</span>
+                                        <span class="doctor-name">{{ i.doctor_name }}</span>
                                     </div>
                                 </td>
                                 <td>{{ i.loginid.email }}</td>

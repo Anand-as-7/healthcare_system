@@ -62,14 +62,25 @@
         .split(',')
         .map((item) => Number(item.trim()))
         .filter((item) => !Number.isNaN(item));
+      const columnWidths = (table.dataset.columnWidths || '')
+        .split(',')
+        .map((item) => item.trim());
+      const thCount = table.querySelectorAll('thead th').length;
+      const columns = columnWidths.length
+        ? Array.from({ length: thCount }, (_, index) => {
+            const width = columnWidths[index];
+            return width ? { width } : {};
+          })
+        : undefined;
 
-      $(selector).DataTable({
+      const dt = $(selector).DataTable({
         dom: '<"dt-top-bar mb-3"<"dt-length"l><"dt-search"f>>t<"dt-bottom-bar mt-4"<"dt-info"i><"dt-pagination"p>>',
         scrollX: true,
         pageLength: 10,
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']],
         order: [[0, 'desc']],
         autoWidth: false,
+        columns,
         columnDefs: nowrapTargets.length ? [{ targets: nowrapTargets, className: 'dt-body-nowrap' }] : [],
         language: {
           search: `Search ${entityLabel}:`,
@@ -81,6 +92,10 @@
           }
         }
       });
+
+      dt.columns.adjust();
+      window.addEventListener('load', () => dt.columns.adjust());
+      $(window).on('resize', () => dt.columns.adjust());
     });
 
     return true;

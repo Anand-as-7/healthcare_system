@@ -133,7 +133,8 @@ body {
 }
 
 .users-table-shell table.dataTable,
-.users-table-shell #usersTable {
+.users-table-shell #usersTable,
+.users-table-shell #doctorsTable {
   width: 100% !important;
   border-collapse: separate;
   border-spacing: 0;
@@ -141,7 +142,8 @@ body {
 }
 
 .users-table-shell table.dataTable thead th,
-.users-table-shell #usersTable thead th {
+.users-table-shell #usersTable thead th,
+.users-table-shell #doctorsTable thead th {
   border-bottom: 1px solid #c3c5d7;
   font-size: 0.74rem;
   letter-spacing: 0.06em;
@@ -152,15 +154,18 @@ body {
   text-align: left;
   white-space: nowrap;
   vertical-align: middle;
+  box-sizing: border-box;
 }
 
 .users-table-shell table.dataTable tbody td,
-.users-table-shell #usersTable tbody td {
+.users-table-shell #usersTable tbody td,
+.users-table-shell #doctorsTable tbody td {
   border-bottom: 1px solid rgba(195, 197, 215, 0.4);
   padding: 14px;
   text-align: left;
   vertical-align: middle;
   color: #151c27;
+  box-sizing: border-box;
 }
 
 .users-table-shell table.dataTable tbody td.dt-body-nowrap {
@@ -170,16 +175,45 @@ body {
 .users-table-shell table.dataTable thead th:not(:last-child),
 .users-table-shell table.dataTable tbody td:not(:last-child),
 .users-table-shell #usersTable thead th:not(:last-child),
-.users-table-shell #usersTable tbody td:not(:last-child) {
+.users-table-shell #usersTable tbody td:not(:last-child),
+.users-table-shell #doctorsTable thead th:not(:last-child),
+.users-table-shell #doctorsTable tbody td:not(:last-child) {
   white-space: nowrap;
 }
 
 .users-table-shell table.dataTable tbody td:last-child,
-.users-table-shell #usersTable tbody td:last-child {
+.users-table-shell #usersTable tbody td:last-child,
+.users-table-shell #doctorsTable tbody td:last-child {
   white-space: normal;
   word-break: break-word;
   line-height: 1.4;
   min-width: 260px;
+}
+
+/* Doctors table alignment hardening */
+.users-table-shell #doctorsTable td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.users-table-shell #doctorsTable td:nth-child(2) {
+  min-width: 250px;
+}
+
+.users-table-shell #doctorsTable td:nth-child(3) {
+  min-width: 220px;
+}
+
+.users-table-shell #doctorsTable .doctor-cell {
+  min-width: 230px;
+}
+
+.users-table-shell #doctorsTable .doctor-name {
+  display: inline-block;
+  max-width: 165px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .users-table-shell .dt-top-bar,

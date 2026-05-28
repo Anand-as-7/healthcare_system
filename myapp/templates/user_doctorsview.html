@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>MedTech Global - Find Doctors</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="{% static 'css/user.css' %}" rel="stylesheet" />
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            tertiary: "#00525a",
+            "on-tertiary-container": "#82edfc",
+            "on-primary-fixed-variant": "#003dab",
+            "on-background": "#151c27",
+            "inverse-surface": "#2a313d",
+            "on-primary-container": "#d4dcff",
+            "primary-fixed": "#dbe1ff",
+            "surface-tint": "#1353d8",
+            "surface-container-highest": "#dce2f3",
+            "primary-fixed-dim": "#b5c4ff",
+            "on-secondary-fixed": "#25005a",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed": "#00174d",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "on-tertiary": "#ffffff",
+            background: "#f9f9ff",
+            "surface-container-high": "#e2e8f8",
+            "on-tertiary-fixed-variant": "#004f57",
+            "on-tertiary-fixed": "#001f23",
+            "tertiary-container": "#006c77",
+            "surface-dim": "#d3daea",
+            "inverse-primary": "#b5c4ff",
+            "on-error": "#ffffff",
+            error: "#ba1a1a",
+            "secondary-fixed": "#eaddff",
+            "surface-bright": "#f9f9ff",
+            "on-surface": "#151c27",
+            "on-surface-variant": "#434654",
+            "secondary-fixed-dim": "#d2bbff",
+            "tertiary-fixed": "#92f1ff",
+            surface: "#f9f9ff",
+            "secondary-container": "#8b4aff",
+            "inverse-on-surface": "#ebf1ff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed-dim": "#6ad6e5",
+            "primary-container": "#1a56db",
+            secondary: "#7127e5",
+            "surface-variant": "#dce2f3",
+            "on-secondary-container": "#fffbff",
+            primary: "#003fb1",
+            "outline-variant": "#c3c5d7",
+            "outline": "#737686",
+            "on-error-container": "#93000a"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "16px",
+            xl: "24px",
+            full: "9999px"
+          },
+          spacing: {
+            "section-padding": "64px",
+            "margin-desktop": "48px",
+            "stack-sm": "8px",
+            "stack-md": "16px",
+            gutter: "24px",
+            "container-max": "1440px",
+            "margin-mobile": "16px",
+            unit: "8px",
+            "stack-lg": "32px"
+          },
+          fontFamily: {
+            "body-sm": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          fontSize: {
+            "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "display-lg": ["48px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.05em", fontWeight: "600" }],
+            "label-sm": ["12px", { lineHeight: "16px", fontWeight: "500" }],
+            "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+            "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    .doctor-card-shadow {
+      box-shadow: 0 8px 24px -14px rgba(0, 0, 0, 0.35);
+    }
+
+    .two-line-clamp {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-surface min-h-screen">
+  <header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-stack-sm">
+      <span class="material-symbols-outlined text-primary" data-icon="monitor_heart">monitor_heart</span>
+      <h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">MedTech Global</h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high/50 p-2 rounded-full transition-colors active:scale-95 duration-200" data-icon="notifications">notifications</button>
+      <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+        <img alt="Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCt3S6WN7tgrgDn6SKQHPQo5n-9ivlUNSnjv-uyYCnSJaEn_vxzJxEDgpApFqirHqaQFFQqFC_Lnry3CYz3_D3Rgu3q3T3uCmWUHW1nBkeI_EkDaPJZskWp-CeBaAHpf3mPz-ogPRlTgoBuBD_7PJP2gEdR2QlBPBY9MzF16X4oG_MkOsYdof-Qh8uHHwjKe692xdYIY5RJxCkw9RDIC43hEMj2WrC15cnwmTe_8Sp6nUetqSKnmFevlKs3NRqVU_q4RTlueqYZZuqZ" />
+      </div>
+    </div>
+  </header>
+
+  <aside class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant/20 pt-16 z-40">
+    <div class="p-6 flex items-center gap-4 border-b border-outline-variant/10 mb-4">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+        <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+      </div>
+      <div>
+        <p class="font-label-md text-label-md text-on-surface font-bold">John Doe</p>
+        <p class="text-xs text-on-surface-variant">Patient ID: #MT-8821</p>
+      </div>
+    </div>
+
+    <nav class="flex flex-col gap-1 px-3">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}">
+        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        <span class="font-body-md text-body-md">Home</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors" href="{% url 'userdoctorsview' %}">
+        <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+        <span class="font-body-md text-body-md">Book Appointment</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}#appointments">
+        <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+        <span class="font-body-md text-body-md">View Appointments</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'logout' %}">
+        <span class="material-symbols-outlined" data-icon="logout">logout</span>
+        <span class="font-body-md text-body-md">Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="pt-24 pb-32 md:pb-8 md:pl-72 px-margin-mobile md:px-margin-desktop transition-all duration-300">
+    <section class="mb-stack-lg">
+      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Find your specialist</h2>
+      <p class="font-body-lg text-body-lg text-on-surface-variant">Browse doctors by name and book the right appointment.</p>
+
+      <form action="{% url 'userdoctorsview' %}" method="get" class="mt-stack-md relative">
+        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+          <span class="material-symbols-outlined text-outline">search</span>
+        </div>
+        <input
+          class="w-full h-12 md:h-14 pl-12 pr-32 bg-surface-container-lowest border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm font-body-md text-body-md"
+          name="search"
+          value="{{ search|default:'' }}"
+          placeholder="Search by doctor name, hospital name..."
+          type="text"
+        />
+        <div class="absolute inset-y-2 right-2 flex items-center gap-2">
+          {% if search %}
+          <a href="{% url 'userdoctorsview' %}" class="px-4 h-full inline-flex items-center rounded-lg border border-outline text-on-surface-variant hover:bg-surface-container-high transition-colors">Clear</a>
+          {% endif %}
+          <button class="bg-primary text-on-primary px-6 h-full rounded-lg font-label-md text-label-md active:scale-95 transition-transform" type="submit">Search</button>
+        </div>
+      </form>
+
+      <div class="mt-4 text-sm text-on-surface-variant">
+        Showing <span class="font-semibold text-on-surface">{{ doc|length }}</span> doctor{{ doc|length|pluralize }}
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+      {% for i in doc %}
+      <article class="bg-surface-container-lowest rounded-xl doctor-card-shadow overflow-hidden border border-outline-variant/30 flex flex-col">
+        <div class="h-52 overflow-hidden bg-surface-container-high flex items-center justify-center">
+          {% if i.photo %}
+          <img src="{{ i.photo.url }}" alt="{{ i.doctor_name }}" class="w-full h-full object-cover" />
+          {% else %}
+          <span class="material-symbols-outlined text-6xl text-primary/40">account_circle</span>
+          {% endif %}
+        </div>
+
+        <div class="p-5 flex flex-col gap-2 flex-grow">
+          <h3 class="font-headline-sm text-headline-sm text-on-surface">{{ i.doctor_name }}</h3>
+          <p class="font-label-md text-label-md text-primary">{{ i.specialization }}</p>
+          <p class="font-body-sm text-body-sm text-on-surface-variant two-line-clamp">{{ i.experience }}</p>
+
+          <div class="mt-2 space-y-1 text-sm text-on-surface-variant">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">location_on</span>
+              <span>{{ i.hospitalid.hospital_name }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">call</span>
+              <span>{{ i.contact }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">payments</span>
+              <span>Consultation Fee: Rs. {{ i.consultation_fee }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-5 pt-0">
+          <a href="{% url 'bookappointment' i.id %}"
+            class="w-full py-3 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary-container active:scale-95 transition-all inline-flex items-center justify-center">
+            Make Appointment
+          </a>
+        </div>
+      </article>
+      {% empty %}
+      <div class="md:col-span-2 xl:col-span-3 rounded-xl border border-outline-variant/30 bg-white p-8 text-center text-on-surface-variant">
+        No doctors found{% if search %} for "{{ search }}"{% endif %}.
+      </div>
+      {% endfor %}
+    </section>
+  </main>
+
+  <nav class="fixed bottom-0 w-full z-50 md:hidden bg-surface dark:bg-inverse-surface shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] flex justify-around items-center h-16 pb-safe">
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-all active:scale-90 duration-150" href="{% url 'user_dashboard' %}">
+      <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+      <span class="font-label-sm text-label-sm">Home</span>
+    </a>
+    <a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1 scale-105 transition-all" href="{% url 'userdoctorsview' %}">
+      <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+      <span class="font-label-sm text-label-sm">Schedule</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-all active:scale-90 duration-150" href="{% url 'user_dashboard' %}#appointments">
+      <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+      <span class="font-label-sm text-label-sm">Records</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-all active:scale-90 duration-150" href="{% url 'logout' %}">
+      <span class="material-symbols-outlined" data-icon="logout">logout</span>
+      <span class="font-label-sm text-label-sm">Logout</span>
+    </a>
+  </nav>
+
+  <script src="{% static 'js/user.js' %}"></script>
+</body>
+</html>

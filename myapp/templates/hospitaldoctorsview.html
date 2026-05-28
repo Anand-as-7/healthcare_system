@@ -1,0 +1,542 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>MedTech Global | Hospital Doctors</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+
+  <link href="{% static 'css/hospital.css' %}" rel="stylesheet" />
+  <link href="https://cdn.datatables.net/1.13.8/css/dataTables.dataTables.min.css" rel="stylesheet" />
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            tertiary: "#00525a",
+            "on-tertiary-container": "#82edfc",
+            "on-primary-fixed-variant": "#003dab",
+            "on-background": "#151c27",
+            "inverse-surface": "#2a313d",
+            "on-primary-container": "#d4dcff",
+            "primary-fixed": "#dbe1ff",
+            "surface-tint": "#1353d8",
+            "surface-container-highest": "#dce2f3",
+            "primary-fixed-dim": "#b5c4ff",
+            "on-secondary-fixed": "#25005a",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed": "#00174d",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "on-tertiary": "#ffffff",
+            background: "#f9f9ff",
+            "surface-container-high": "#e2e8f8",
+            "on-tertiary-fixed-variant": "#004f57",
+            "on-tertiary-fixed": "#001f23",
+            "tertiary-container": "#006c77",
+            "surface-dim": "#d3daea",
+            "inverse-primary": "#b5c4ff",
+            "on-error": "#ffffff",
+            error: "#ba1a1a",
+            "secondary-fixed": "#eaddff",
+            "surface-bright": "#f9f9ff",
+            "on-surface": "#151c27",
+            "on-surface-variant": "#434654",
+            "secondary-fixed-dim": "#d2bbff",
+            "tertiary-fixed": "#92f1ff",
+            surface: "#f9f9ff",
+            "secondary-container": "#8b4aff",
+            "inverse-on-surface": "#ebf1ff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed-dim": "#6ad6e5",
+            "primary-container": "#1a56db",
+            secondary: "#7127e5",
+            "surface-variant": "#dce2f3",
+            "on-secondary-container": "#fffbff",
+            primary: "#003fb1",
+            "outline-variant": "#c3c5d7",
+            outline: "#737686",
+            "on-error-container": "#93000a"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          spacing: {
+            "section-padding": "64px",
+            "margin-desktop": "48px",
+            "stack-sm": "8px",
+            "stack-md": "16px",
+            gutter: "24px",
+            "container-max": "1440px",
+            "margin-mobile": "16px",
+            unit: "8px",
+            "stack-lg": "32px"
+          },
+          fontFamily: {
+            "body-sm": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          fontSize: {
+            "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "display-lg": ["48px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.05em", fontWeight: "600" }],
+            "label-sm": ["12px", { lineHeight: "16px", fontWeight: "500" }],
+            "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+            "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    .users-table-shell .dataTables_wrapper {
+      color: #151c27;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    .users-table-shell .dataTables_wrapper .dataTables_length,
+    .users-table-shell .dataTables_wrapper .dataTables_filter,
+    .users-table-shell .dataTables_wrapper .dataTables_info,
+    .users-table-shell .dataTables_wrapper .dataTables_paginate {
+      float: none !important;
+      margin: 0;
+      width: auto;
+      color: #434654;
+      font-size: 0.82rem;
+    }
+
+    .users-table-shell .dt-top-bar .dataTables_length {
+      text-align: left;
+    }
+
+    .users-table-shell .dt-top-bar .dataTables_filter {
+      text-align: right;
+    }
+
+    .users-table-shell .dt-top-bar .dataTables_filter label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      white-space: nowrap;
+      width: auto;
+    }
+
+    .users-table-shell .dataTables_filter input,
+    .users-table-shell .dataTables_length select {
+      border: 1px solid #c3c5d7;
+      border-radius: 0.6rem;
+      padding: 0.45rem 0.65rem;
+      background: #ffffff;
+      color: #151c27;
+    }
+
+    .users-table-shell .dataTables_length select {
+      margin-left: 0.4rem;
+    }
+
+    .users-table-shell .dt-top-bar .dataTables_filter input {
+      min-width: 300px;
+      margin-left: 0;
+      outline: none;
+      box-shadow: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .users-table-shell .dt-top-bar .dataTables_filter input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .users-table-shell .dt-bottom-bar .dataTables_info {
+      text-align: left;
+      padding-top: 0.2rem;
+    }
+
+    .users-table-shell .dt-bottom-bar .dataTables_paginate {
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .users-table-shell .dataTables_paginate .paginate_button {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      min-width: 32px;
+      padding: 0.35rem 0.7rem !important;
+      line-height: 1 !important;
+      border-radius: 0.6rem !important;
+      border: 1px solid #dce2f3 !important;
+      background: #f0f3ff !important;
+      color: #003fb1 !important;
+      margin: 0 !important;
+      transition: all 0.2s ease;
+    }
+
+    .users-table-shell .dataTables_paginate .paginate_button:hover {
+      background: #dbe1ff !important;
+      border-color: #b5c4ff !important;
+      color: #003dab !important;
+    }
+
+    .users-table-shell .dataTables_paginate .paginate_button.current,
+    .users-table-shell .dataTables_paginate .paginate_button.current:hover {
+      background: #003fb1 !important;
+      border-color: #003fb1 !important;
+      color: #ffffff !important;
+    }
+
+    .users-table-shell table.dataTable {
+      width: 100% !important;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: auto;
+    }
+
+    .users-table-shell table.dataTable thead th {
+      border-bottom: 1px solid #c3c5d7;
+      font-size: 0.74rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #737686;
+      background: #f0f3ff;
+      padding: 14px;
+      text-align: left;
+      white-space: nowrap;
+      vertical-align: middle;
+      box-sizing: border-box;
+    }
+
+    .users-table-shell table.dataTable tbody td {
+      border-bottom: 1px solid rgba(195, 197, 215, 0.4);
+      padding: 14px;
+      text-align: left;
+      vertical-align: middle;
+      color: #151c27;
+      box-sizing: border-box;
+    }
+
+    .users-table-shell table.dataTable tbody td.dt-body-nowrap {
+      white-space: nowrap;
+    }
+
+    .users-table-shell #hospitalDoctorsTable th,
+    .users-table-shell #hospitalDoctorsTable td {
+      white-space: nowrap;
+    }
+
+    .users-table-shell #hospitalDoctorsTable td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .users-table-shell #hospitalDoctorsTable td:nth-child(2) {
+      min-width: 240px;
+    }
+
+    .users-table-shell #hospitalDoctorsTable td:nth-child(3) {
+      min-width: 220px;
+    }
+
+    .users-table-shell #hospitalDoctorsTable .doctor-cell {
+      min-width: 220px;
+    }
+
+    .users-table-shell .dt-top-bar,
+    .users-table-shell .dt-bottom-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 767px) {
+      .users-table-shell .dt-top-bar,
+      .users-table-shell .dt-bottom-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .users-table-shell .dt-top-bar .dataTables_filter,
+      .users-table-shell .dt-bottom-bar .dataTables_paginate {
+        text-align: left;
+        justify-content: flex-start;
+      }
+
+      .users-table-shell .dt-top-bar .dataTables_filter label {
+        justify-content: flex-start;
+      }
+
+      .users-table-shell .dt-top-bar .dataTables_filter input {
+        min-width: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-background min-h-screen">
+  <header
+    class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 flex justify-between items-center h-16 px-16 md:px-12">
+    <div class="flex items-center gap-stack-sm">
+      <span class="material-symbols-outlined text-primary text-3xl">monitor_heart</span>
+      <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">MedTech Global</span>
+    </div>
+    <div class="flex items-center gap-stack-md">
+      <button
+        class="p-2 rounded-full hover:bg-surface-container-high/50 transition-colors active:scale-95 duration-200">
+        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+      </button>
+      <button
+        class="p-2 rounded-full hover:bg-surface-container-high/50 transition-colors active:scale-95 duration-200 relative">
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+    </div>
+  </header>
+
+  <aside
+    class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant/20 pt-20">
+    <nav class="flex flex-col gap-1 px-4">
+      <a class="flex items-center gap-stack-md py-3 px-4 text-on-surface-variant hover:bg-surface-container-high transition-colors"
+        href="{% url 'hospital_dashboard' %}">
+        <span class="material-symbols-outlined">grid_view</span>
+        <span class="font-body-md text-body-md">Dashboard</span>
+      </a>
+
+      <div>
+        <button aria-controls="doctorsDropdown" aria-expanded="true"
+          class="hospital-dropdown-toggle w-full flex items-center justify-between gap-stack-md py-3 px-4 text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors text-left"
+          type="button">
+          <span class="flex items-center gap-stack-md">
+            <span class="material-symbols-outlined">group_add</span>
+            <span class="font-body-md text-body-md">Doctors</span>
+          </span>
+          <span class="material-symbols-outlined transition-transform duration-200" style="transform: rotate(180deg);">expand_more</span>
+        </button>
+        <div class="hospital-dropdown-menu pl-8 pr-2 pb-2 flex flex-col gap-1" id="doctorsDropdown">
+          <a class="flex items-center gap-stack-md py-2 px-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors"
+            href="{% url 'doctor_register' %}">
+            <span class="material-symbols-outlined text-[20px]">person_add</span>
+            <span class="font-body-sm text-body-sm">Add Doctors</span>
+          </a>
+          <a class="flex items-center gap-stack-md py-2 px-3 rounded-lg bg-primary/10 text-primary font-semibold"
+            href="{% url 'hospitaldoctorsview' %}">
+            <span class="material-symbols-outlined text-[20px]">badge</span>
+            <span class="font-body-sm text-body-sm">View Doctors</span>
+          </a>
+        </div>
+      </div>
+
+      <a class="flex items-center gap-stack-md py-3 px-4 text-on-surface-variant hover:bg-surface-container-high transition-colors"
+        href="{% url 'logout' %}">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="font-body-md text-body-md">Logout</span>
+      </a>
+    </nav>
+
+    <div class="mt-auto p-4 border-t border-outline-variant/10">
+      <div class="bg-primary/5 rounded-xl p-4">
+        <span class="text-xs font-bold text-primary uppercase tracking-wider block mb-1">System Status</span>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          <span class="text-xs text-on-surface-variant">All Systems Nominal</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="md:pl-64 pt-20 pb-24 md:pb-8 px-margin-mobile md:px-margin-desktop">
+    <div class="max-w-container-max mx-auto flex flex-col gap-stack-lg">
+      <section
+        class="rounded-xl p-6 bg-gradient-to-r from-primary to-primary-container text-on-primary shadow-[0_10px_24px_-10px_rgba(0,63,177,0.75)]">
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 class="font-headline-lg text-headline-lg">Doctor Directory</h2>
+            <p class="text-sm text-on-primary/90">Search, sort and manage doctors registered under your hospital.</p>
+          </div>
+          <div class="bg-white/15 border border-white/20 rounded-lg px-4 py-3">
+            <p class="text-xs uppercase tracking-wider text-on-primary/80">Total Doctors</p>
+            <p class="text-2xl font-semibold">{{ doc|length }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="users-table-shell bg-white rounded-xl shadow-[0_8px_18px_-12px_rgba(0,0,0,0.25)] border border-outline-variant/30 overflow-hidden p-4 md:p-6">
+        <div class="mb-4 flex items-center justify-between gap-3 flex-wrap">
+          <h3 class="text-headline-sm font-headline-sm text-on-background">All Doctors</h3>
+          <span class="text-xs text-outline">DataTable: search, sort, paginate</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full" id="hospitalDoctorsTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Doctor</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>DOB</th>
+                <th>Specialization</th>
+                <th>Experience</th>
+                <th>Fee</th>
+                <th>Contact</th>
+                <th>Hospital</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in doc %}
+              <tr>
+                <td>#{{ i.id }}</td>
+                <td class="font-semibold text-on-surface">
+                  <div class="doctor-cell flex items-center gap-3">
+                    {% if i.photo %}
+                    <img src="{{ i.photo.url }}" alt="{{ i.doctor_name }}"
+                      class="w-10 h-10 rounded-full object-cover border border-outline-variant/40"
+                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <div
+                      class="w-10 h-10 rounded-full bg-primary/10 text-primary items-center justify-center text-xs font-bold hidden"
+                      style="display:none;">DR</div>
+                    {% else %}
+                    <div
+                      class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">
+                      DR</div>
+                    {% endif %}
+                    <span>{{ i.doctor_name }}</span>
+                  </div>
+                </td>
+                <td>{{ i.loginid.email }}</td>
+                <td>{{ i.gender }}</td>
+                <td>{{ i.dob }}</td>
+                <td>{{ i.specialization }}</td>
+                <td>{{ i.experience }}</td>
+                <td>Rs. {{ i.consultation_fee }}</td>
+                <td>{{ i.contact }}</td>
+                <td>{{ i.hospitalid.hospital_name }} ({{ i.hospitalid.hospitalid }})</td>
+                <td>
+                  <a href="{% url 'slotadding' i.id %}"
+                    class="inline-flex items-center rounded-lg bg-primary px-3 py-2 text-white text-sm font-semibold hover:bg-on-primary-fixed-variant transition-colors">
+                    Add Slot
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="11" class="text-center py-6 text-outline">No doctor data available.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav
+    class="fixed bottom-0 w-full z-50 md:hidden bg-surface shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] flex justify-around items-center h-16 pb-safe border-t border-outline-variant/10">
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1"
+      href="{% url 'hospital_dashboard' %}">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span class="font-label-sm text-label-sm">Home</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1"
+      href="{% url 'doctor_register' %}">
+      <span class="material-symbols-outlined">person_add</span>
+      <span class="font-label-sm text-label-sm">Add</span>
+    </a>
+    <a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1"
+      href="{% url 'hospitaldoctorsview' %}">
+      <span class="material-symbols-outlined">medical_services</span>
+      <span class="font-label-sm text-label-sm">Doctors</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1" href="{% url 'logout' %}">
+      <span class="material-symbols-outlined">logout</span>
+      <span class="font-label-sm text-label-sm">Logout</span>
+    </a>
+  </nav>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+  <script src="{% static 'js/hospital.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.jQuery && window.jQuery.fn && window.jQuery.fn.DataTable) {
+        const table = window.jQuery('#hospitalDoctorsTable').DataTable({
+          dom: '<"dt-top-bar mb-3"<"dt-length"l><"dt-search"f>>t<"dt-bottom-bar mt-4"<"dt-info"i><"dt-pagination"p>>',
+          scrollX: true,
+          pageLength: 10,
+          lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']],
+          order: [[0, 'desc']],
+          autoWidth: false,
+          columns: [
+            { width: '80px' },
+            { width: '260px' },
+            { width: '230px' },
+            { width: '120px' },
+            { width: '140px' },
+            { width: '180px' },
+            { width: '130px' },
+            { width: '120px' },
+            { width: '150px' },
+            { width: '320px' },
+            { width: '140px' }
+          ],
+          columnDefs: [
+            { targets: [0, 3, 4, 6, 7, 8, 9, 10], className: 'dt-body-nowrap' }
+          ],
+          language: {
+            search: 'Search doctors:',
+            lengthMenu: 'Show _MENU_ entries',
+            info: 'Showing _START_ to _END_ of _TOTAL_ doctors',
+            paginate: {
+              previous: 'Prev',
+              next: 'Next'
+            }
+          }
+        });
+
+        table.columns.adjust();
+        window.addEventListener('load', function () {
+          table.columns.adjust();
+        });
+        window.jQuery(window).on('resize', function () {
+          table.columns.adjust();
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,665 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>MedTech Global | Slot Planner</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <link href="{% static 'css/hospital.css' %}" rel="stylesheet" />
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            tertiary: "#00525a",
+            "on-tertiary-container": "#82edfc",
+            "on-primary-fixed-variant": "#003dab",
+            "on-background": "#151c27",
+            "inverse-surface": "#2a313d",
+            "on-primary-container": "#d4dcff",
+            "primary-fixed": "#dbe1ff",
+            "surface-tint": "#1353d8",
+            "surface-container-highest": "#dce2f3",
+            "primary-fixed-dim": "#b5c4ff",
+            "on-secondary-fixed": "#25005a",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed": "#00174d",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "on-tertiary": "#ffffff",
+            background: "#f9f9ff",
+            "surface-container-high": "#e2e8f8",
+            "on-tertiary-fixed-variant": "#004f57",
+            "on-tertiary-fixed": "#001f23",
+            "tertiary-container": "#006c77",
+            "surface-dim": "#d3daea",
+            "inverse-primary": "#b5c4ff",
+            "on-error": "#ffffff",
+            error: "#ba1a1a",
+            "secondary-fixed": "#eaddff",
+            "surface-bright": "#f9f9ff",
+            "on-surface": "#151c27",
+            "on-surface-variant": "#434654",
+            "secondary-fixed-dim": "#d2bbff",
+            "tertiary-fixed": "#92f1ff",
+            surface: "#f9f9ff",
+            "secondary-container": "#8b4aff",
+            "inverse-on-surface": "#ebf1ff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed-dim": "#6ad6e5",
+            "primary-container": "#1a56db",
+            secondary: "#7127e5",
+            "surface-variant": "#dce2f3",
+            "on-secondary-container": "#fffbff",
+            primary: "#003fb1",
+            "outline-variant": "#c3c5d7",
+            outline: "#737686",
+            "on-error-container": "#93000a"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          spacing: {
+            "section-padding": "64px",
+            "margin-desktop": "48px",
+            "stack-sm": "8px",
+            "stack-md": "16px",
+            gutter: "24px",
+            "container-max": "1440px",
+            "margin-mobile": "16px",
+            unit: "8px",
+            "stack-lg": "32px"
+          },
+          fontFamily: {
+            "body-sm": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          fontSize: {
+            "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "display-lg": ["48px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.05em", fontWeight: "600" }],
+            "label-sm": ["12px", { lineHeight: "16px", fontWeight: "500" }],
+            "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+            "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    .slot-shell input[type="date"],
+    .slot-shell input[type="time"],
+    .slot-shell input[type="text"],
+    .slot-shell .flatpickr-input,
+    .slot-shell input.form-control,
+    .slot-shell select,
+    .slot-shell textarea {
+      width: 100%;
+      border: 1px solid #c3c5d7;
+      border-radius: 0.6rem;
+      background: #fff;
+      color: #151c27;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .slot-shell input:focus,
+    .slot-shell select:focus,
+    .slot-shell textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .slot-shell .mode-card input[type="radio"],
+    .slot-shell .weekday-chip input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slot-shell .mode-card label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border: 1px solid #c3c5d7;
+      border-radius: 0.8rem;
+      padding: 14px;
+      cursor: pointer;
+      transition: .2s ease;
+      background: #fff;
+      height: 100%;
+    }
+
+    .slot-shell .mode-card input:checked+label {
+      border-color: #1a56db;
+      background: #eff4ff;
+      box-shadow: inset 0 0 0 1px rgba(26, 86, 219, 0.2);
+    }
+
+    .slot-shell .mode-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #dbe8ff;
+      color: #1a56db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .slot-shell .mode-card input:checked+label .mode-icon {
+      background: #1a56db;
+      color: #fff;
+    }
+
+    .slot-shell .weekday-chip label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #c3c5d7;
+      border-radius: 9999px;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #434654;
+      cursor: pointer;
+      transition: .2s ease;
+      background: #fff;
+    }
+
+    .slot-shell .weekday-chip input:checked+label {
+      background: #003fb1;
+      border-color: #003fb1;
+      color: #fff;
+    }
+
+    .mode-block.d-none {
+      display: none;
+    }
+
+    .slot-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: 390px;
+      max-width: 94vw;
+      transform: translateX(100%);
+      transition: transform .25s ease;
+      z-index: 80;
+      background: #fff;
+      border-left: 1px solid #c3c5d7;
+      box-shadow: -8px 0 24px rgba(0, 0, 0, .08);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slot-panel.active {
+      transform: translateX(0);
+    }
+
+    .slot-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 28, 54, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+      z-index: 70;
+    }
+
+    .slot-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .slot-row.removing {
+      opacity: 0;
+      transform: translateX(16px);
+      transition: .2s ease;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-background min-h-screen">
+  <header
+    class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 flex justify-between items-center h-16 px-16 md:px-12">
+    <div class="flex items-center gap-stack-sm">
+      <span class="material-symbols-outlined text-primary text-3xl">monitor_heart</span>
+      <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">MedTech Global</span>
+    </div>
+    <div class="flex items-center gap-stack-md">
+      <button class="p-2 rounded-full hover:bg-surface-container-high/50 transition-colors active:scale-95 duration-200">
+        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+      </button>
+      <button
+        class="p-2 rounded-full hover:bg-surface-container-high/50 transition-colors active:scale-95 duration-200 relative">
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+    </div>
+  </header>
+
+  <aside
+    class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant/20 pt-20">
+    <nav class="flex flex-col gap-1 px-4">
+      <a class="flex items-center gap-stack-md py-3 px-4 text-on-surface-variant hover:bg-surface-container-high transition-colors"
+        href="{% url 'hospital_dashboard' %}">
+        <span class="material-symbols-outlined">grid_view</span>
+        <span class="font-body-md text-body-md">Dashboard</span>
+      </a>
+
+      <div>
+        <button aria-controls="doctorsDropdown" aria-expanded="true"
+          class="hospital-dropdown-toggle w-full flex items-center justify-between gap-stack-md py-3 px-4 text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors text-left"
+          type="button">
+          <span class="flex items-center gap-stack-md">
+            <span class="material-symbols-outlined">group_add</span>
+            <span class="font-body-md text-body-md">Doctors</span>
+          </span>
+          <span class="material-symbols-outlined transition-transform duration-200"
+            style="transform: rotate(180deg);">expand_more</span>
+        </button>
+        <div class="hospital-dropdown-menu pl-8 pr-2 pb-2 flex flex-col gap-1" id="doctorsDropdown">
+          <a class="flex items-center gap-stack-md py-2 px-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors"
+            href="{% url 'doctor_register' %}">
+            <span class="material-symbols-outlined text-[20px]">person_add</span>
+            <span class="font-body-sm text-body-sm">Add Doctors</span>
+          </a>
+          <a class="flex items-center gap-stack-md py-2 px-3 rounded-lg bg-primary/10 text-primary font-semibold"
+            href="{% url 'hospitaldoctorsview' %}">
+            <span class="material-symbols-outlined text-[20px]">badge</span>
+            <span class="font-body-sm text-body-sm">View Doctors</span>
+          </a>
+        </div>
+      </div>
+
+      <a class="flex items-center gap-stack-md py-3 px-4 text-on-surface-variant hover:bg-surface-container-high transition-colors"
+        href="{% url 'logout' %}">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="font-body-md text-body-md">Logout</span>
+      </a>
+    </nav>
+
+    <div class="mt-auto p-4 border-t border-outline-variant/10">
+      <div class="bg-primary/5 rounded-xl p-4">
+        <span class="text-xs font-bold text-primary uppercase tracking-wider block mb-1">System Status</span>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          <span class="text-xs text-on-surface-variant">All Systems Nominal</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="md:pl-64 pt-20 pb-24 md:pb-8 px-margin-mobile md:px-margin-desktop">
+    <div class="max-w-[980px] mx-auto flex flex-col gap-6 slot-shell">
+      <section
+        class="rounded-xl p-6 bg-gradient-to-r from-primary to-primary-container text-on-primary shadow-[0_10px_24px_-10px_rgba(0,63,177,0.75)]">
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.2em] text-on-primary/80">Scheduling</p>
+            <h1 class="font-headline-lg text-headline-lg">Slot Planner</h1>
+            <p class="text-sm text-on-primary/90">Create one-time or recurring doctor slots for appointments.</p>
+          </div>
+          <button onclick="openPanel()" type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-white/20 border border-white/30 px-4 py-3 text-white font-semibold hover:bg-white/30 transition-colors">
+            <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+            <span>View slots</span>
+            {% if slots %}
+            <span class="inline-flex items-center justify-center min-w-6 h-6 px-2 rounded-full bg-white text-primary text-xs font-bold">
+              {{ slots|length }}
+            </span>
+            {% endif %}
+          </button>
+        </div>
+      </section>
+
+      {% if messages %}
+      <section class="space-y-2">
+        {% for message in messages %}
+        <div
+          class="rounded-lg px-4 py-3 border {% if message.tags == 'success' %}bg-green-50 border-green-200 text-green-800{% elif message.tags == 'error' %}bg-red-50 border-red-200 text-red-800{% else %}bg-blue-50 border-blue-200 text-blue-800{% endif %}">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <section class="bg-white rounded-xl border border-outline-variant/30 shadow-sm overflow-hidden">
+        <form method="POST" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+          <div class="p-4 border-b border-outline-variant/20 bg-error-container/50 text-on-error-container text-sm">
+            {{ form.non_field_errors }}
+          </div>
+          {% endif %}
+
+          <div class="p-6 border-b border-outline-variant/20">
+            <h3 class="text-label-md uppercase tracking-[0.16em] text-outline mb-4">Scheduling Mode</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="mode-card relative">
+                <input type="radio" name="{{ form.mode.html_name }}" id="mode_single" value="single"
+                  {% if form.mode.value == 'single' or not form.mode.value %}checked{% endif %}>
+                <label for="mode_single">
+                  <div class="mode-icon">
+                    <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                  </div>
+                  <div>
+                    <p class="text-base font-semibold text-on-surface">Single day</p>
+                    <p class="text-sm text-on-surface-variant">Add a slot for one specific date.</p>
+                  </div>
+                </label>
+              </div>
+              <div class="mode-card relative">
+                <input type="radio" name="{{ form.mode.html_name }}" id="mode_recurring" value="recurring"
+                  {% if form.mode.value == 'recurring' %}checked{% endif %}>
+                <label for="mode_recurring">
+                  <div class="mode-icon">
+                    <span class="material-symbols-outlined text-[20px]">sync</span>
+                  </div>
+                  <div>
+                    <p class="text-base font-semibold text-on-surface">Repeat for a period</p>
+                    <p class="text-sm text-on-surface-variant">Apply weekly pattern across date range.</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 border-b border-outline-variant/20 mode-block" data-mode="single">
+            <h3 class="text-label-md uppercase tracking-[0.16em] text-outline mb-4">Date</h3>
+            <div class="max-w-sm">
+              <label class="text-xs uppercase tracking-[0.12em] text-outline block mb-2"
+                for="{{ form.slot_date.id_for_label }}">Slot Date</label>
+              {{ form.slot_date }}
+              {% if form.slot_date.errors %}
+              <p class="text-sm text-error mt-2">{{ form.slot_date.errors.0 }}</p>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="p-6 border-b border-outline-variant/20 mode-block d-none" data-mode="recurring">
+            <h3 class="text-label-md uppercase tracking-[0.16em] text-outline mb-4">Date Range and Weekdays</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs uppercase tracking-[0.12em] text-outline block mb-2"
+                  for="{{ form.start_date.id_for_label }}">Start Date</label>
+                {{ form.start_date }}
+                {% if form.start_date.errors %}
+                <p class="text-sm text-error mt-2">{{ form.start_date.errors.0 }}</p>
+                {% endif %}
+              </div>
+              <div>
+                <label class="text-xs uppercase tracking-[0.12em] text-outline block mb-2"
+                  for="{{ form.end_date.id_for_label }}">End Date</label>
+                {{ form.end_date }}
+                {% if form.end_date.errors %}
+                <p class="text-sm text-error mt-2">{{ form.end_date.errors.0 }}</p>
+                {% endif %}
+              </div>
+            </div>
+            <div class="mt-5">
+              <label class="text-xs uppercase tracking-[0.12em] text-outline block mb-2">Active Weekdays</label>
+              <div class="flex flex-wrap gap-2">
+                {% for checkbox in form.weekdays %}
+                <div class="weekday-chip relative">
+                  {{ checkbox.tag }}
+                  <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                </div>
+                {% endfor %}
+              </div>
+              {% if form.weekdays.errors %}
+              <p class="text-sm text-error mt-2">{{ form.weekdays.errors.0 }}</p>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-label-md uppercase tracking-[0.16em] text-outline mb-4">Working Hours</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs uppercase tracking-[0.12em] text-outline block mb-2"
+                  for="{{ form.starttime.id_for_label }}">Start Time</label>
+                {{ form.starttime }}
+                {% if form.starttime.errors %}
+                <p class="text-sm text-error mt-2">{{ form.starttime.errors.0 }}</p>
+                {% endif %}
+              </div>
+              <div>
+                <label class="text-xs uppercase tracking-[0.12em] text-outline block mb-2"
+                  for="{{ form.endtime.id_for_label }}">End Time</label>
+                {{ form.endtime }}
+                {% if form.endtime.errors %}
+                <p class="text-sm text-error mt-2">{{ form.endtime.errors.0 }}</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="my-5 text-center text-xs uppercase tracking-[0.14em] text-outline relative">
+              <span class="bg-white px-3 relative z-10">Break Window (Optional)</span>
+              <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 border-t border-outline-variant/40"></div>
+            </div>
+
+            <div class="bg-surface-container-low rounded-lg p-3 text-sm text-primary mb-4">
+              Leave break fields empty if there is no break.
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs uppercase tracking-[0.12em] text-outline block mb-2"
+                  for="{{ form.break_start.id_for_label }}">Break Start</label>
+                {{ form.break_start }}
+                {% if form.break_start.errors %}
+                <p class="text-sm text-error mt-2">{{ form.break_start.errors.0 }}</p>
+                {% endif %}
+              </div>
+              <div>
+                <label class="text-xs uppercase tracking-[0.12em] text-outline block mb-2"
+                  for="{{ form.break_end.id_for_label }}">Break End</label>
+                {{ form.break_end }}
+                {% if form.break_end.errors %}
+                <p class="text-sm text-error mt-2">{{ form.break_end.errors.0 }}</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="pt-6 mt-6 border-t border-outline-variant/20 flex flex-wrap gap-3">
+              <button type="submit"
+                class="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-white text-sm font-semibold hover:bg-on-primary-fixed-variant transition-colors">
+                Save Slot(s)
+              </button>
+              <a href="{% url 'hospitaldoctorsview' %}"
+                class="inline-flex items-center rounded-lg border border-outline-variant px-5 py-2.5 text-on-surface text-sm font-medium hover:bg-surface-container-low transition-colors">
+                Cancel
+              </a>
+            </div>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <nav
+    class="fixed bottom-0 w-full z-50 md:hidden bg-surface shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] flex justify-around items-center h-16 pb-safe border-t border-outline-variant/10">
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1"
+      href="{% url 'hospital_dashboard' %}">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span class="font-label-sm text-label-sm">Home</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1"
+      href="{% url 'doctor_register' %}">
+      <span class="material-symbols-outlined">person_add</span>
+      <span class="font-label-sm text-label-sm">Add</span>
+    </a>
+    <a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1"
+      href="{% url 'hospitaldoctorsview' %}">
+      <span class="material-symbols-outlined">medical_services</span>
+      <span class="font-label-sm text-label-sm">Doctors</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1" href="{% url 'logout' %}">
+      <span class="material-symbols-outlined">logout</span>
+      <span class="font-label-sm text-label-sm">Logout</span>
+    </a>
+  </nav>
+
+  <div class="slot-overlay" id="panelOverlay" onclick="closePanel()"></div>
+
+  <aside class="slot-panel" id="slotsPanel">
+    <div class="p-5 border-b border-outline-variant/30 flex items-start justify-between">
+      <div>
+        <h3 class="text-headline-sm font-semibold">Your Slots</h3>
+        <p class="text-sm text-on-surface-variant">All scheduled availability</p>
+      </div>
+      <button onclick="closePanel()" type="button"
+        class="w-8 h-8 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high inline-flex items-center justify-center">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+
+    <div class="p-4 overflow-y-auto flex-1">
+      {% if slots %}
+      <div class="space-y-3">
+        {% for s in slots %}
+        <div class="slot-row bg-surface-container-low border border-outline-variant/25 rounded-lg p-3 flex justify-between gap-3"
+          id="slot-row-{{ s.id }}">
+          <div class="min-w-0">
+            <p class="font-semibold text-on-surface text-sm">
+              {% if s.slot_date %}
+              {{ s.slot_date|date:"d M Y" }}
+              {% else %}
+              Recurring Slot
+              {% endif %}
+            </p>
+            <p class="text-sm text-on-surface-variant mt-1">
+              {{ s.starttime|time:"g:i A" }} - {{ s.endtime|time:"g:i A" }}
+            </p>
+            {% if s.break_start and s.break_end %}
+            <p class="text-xs text-outline mt-1">
+              Break: {{ s.break_start|time:"g:i A" }} - {{ s.break_end|time:"g:i A" }}
+            </p>
+            {% endif %}
+          </div>
+          <form method="POST" action="{% url 'delete_slot' s.id %}" onsubmit="return confirmDelete(event, {{ s.id }})">
+            {% csrf_token %}
+            <button type="submit"
+              class="w-8 h-8 rounded-md bg-red-50 border border-red-200 text-red-600 hover:bg-red-100 inline-flex items-center justify-center"
+              title="Delete slot">
+              <span class="material-symbols-outlined text-[18px]">delete</span>
+            </button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="h-full min-h-[280px] flex flex-col items-center justify-center text-center text-on-surface-variant">
+        <span class="material-symbols-outlined text-4xl text-outline mb-2">event_busy</span>
+        <p class="font-semibold text-on-surface">No slots added yet</p>
+        <p class="text-sm">Create your first slot using the form.</p>
+      </div>
+      {% endif %}
+    </div>
+  </aside>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="{% static 'js/hospital.js' %}"></script>
+  <script>
+    (function () {
+      const today = new Date().toISOString().split('T')[0];
+      document.querySelectorAll('input[type="date"]').forEach((el) => el.setAttribute('min', today));
+
+      if (window.flatpickr) {
+        document.querySelectorAll('.timepicker').forEach((el) => {
+          flatpickr(el, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            altInput: true,
+            altFormat: "h:i K",
+            time_24hr: false,
+            minuteIncrement: 5,
+            allowInput: false
+          });
+        });
+      }
+
+      const modeInputs = document.querySelectorAll('input[name="{{ form.mode.html_name }}"]');
+      const blocks = document.querySelectorAll('.mode-block');
+
+      function toggleBlocks() {
+        const checked = document.querySelector('input[name="{{ form.mode.html_name }}"]:checked');
+        const selected = checked ? checked.value : 'single';
+        blocks.forEach((block) => block.classList.toggle('d-none', block.dataset.mode !== selected));
+      }
+
+      modeInputs.forEach((i) => i.addEventListener('change', toggleBlocks));
+      toggleBlocks();
+    })();
+
+    function openPanel() {
+      document.getElementById('slotsPanel').classList.add('active');
+      document.getElementById('panelOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePanel() {
+      document.getElementById('slotsPanel').classList.remove('active');
+      document.getElementById('panelOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function confirmDelete(e, slotId) {
+      e.preventDefault();
+      if (!confirm('Delete this slot? Any existing appointments on this date will remain.')) {
+        return false;
+      }
+      const form = e.target;
+      const row = document.getElementById('slot-row-' + slotId);
+      if (row) {
+        row.classList.add('removing');
+        setTimeout(() => form.submit(), 220);
+      } else {
+        form.submit();
+      }
+      return false;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closePanel();
+      }
+    });
+  </script>
+</body>
+
+</html>

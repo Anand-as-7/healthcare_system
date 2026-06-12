@@ -672,19 +672,18 @@ def user_appointmentdetailsview(request, id=None):
     )
 
     now = timezone.localtime()
+    appt_dt = timezone.make_aware(datetime.combine(appointment.date, appointment.time))
     if appointment.cancel_status == 1:
         status = 'cancelled'
     else:
-        appt_dt = timezone.make_aware(datetime.combine(appointment.date, appointment.time))
         status = 'upcoming' if appt_dt >= now else 'completed'
-    can_modify = appointment.cancel_status == 0 and timezone.make_aware(
-        datetime.combine(appointment.date, appointment.time)
-    ) > now
+    can_modify = appointment.cancel_status == 0 and appt_dt > now
     prescription = Prescription.objects.filter(
         appointment_id=appointment,
         doctor_id=appointment.doctorid,
     ).first()
     video = Video.objects.filter(appointmentid=appointment).order_by('-id').first()
+    can_join_call = appointment.cancel_status == 0 and bool(video and video.video_url) and appt_dt <= now
 
     return render(request, 'viewdetails.html', {
         'user': user,
@@ -694,6 +693,7 @@ def user_appointmentdetailsview(request, id=None):
         'video': video,
         'status': status,
         'can_modify': can_modify,
+        'can_join_call': can_join_call,
         'appointment_code': f"MT-{appointment.id:06d}",
     })
 
@@ -849,11 +849,11 @@ def doctorappointmentsview(request):
     }
 
     for appt in qs:
+        appt_dt = timezone.make_aware(datetime.combine(appt.date, appt.time))
         if appt.cancel_status == 1:
             category = 'cancelled'
         else:
-            appt_dt = timezone.make_aware(datetime.combine(appt.date, appt.time))
-            if appt.date == today and appt_dt >= now:
+            if appt.date == today:
                 category = 'pending_today'
             elif appt.date > today:
                 category = 'upcoming'
@@ -873,6 +873,7 @@ def doctorappointmentsview(request):
             'appointment': appt,
             'category': category,
             'prescription': rx_map.get(appt.id),
+            'can_start_call': category == 'pending_today' and appt_dt <= now,
         })
 
     category_order = {'pending_today': 0, 'upcoming': 1, 'cancelled': 2}
@@ -999,6 +1000,13 @@ def videoconference(request, id):
         participant_id = f"patient{patient.id}"
         participant_name = patient.name
         back_url = reverse('user_appointmentdetailsview', args=[appointment.id])
+
+    appt_dt = timezone.make_aware(datetime.combine(appointment.date, appointment.time))
+    if timezone.localtime() < appt_dt:
+        messages.info(request, "Video call will be available at the appointment time.")
+        if usertype == 'doctor':
+            return redirect('doctorappointmentsview')
+        return redirect('user_appointmentdetailsview', id=appointment.id)
 
     video = Video.objects.filter(appointmentid=appointment).order_by('-id').first()
     if usertype == 'user' and not (video and video.video_url):

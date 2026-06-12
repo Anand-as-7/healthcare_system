@@ -276,10 +276,17 @@ Prescription pending
 View
 </button>
 {% if row.category != 'cancelled' %}
+{% if row.can_start_call %}
 <a href="{% url 'videoconference' row.appointment.id %}" class="rounded-lg bg-surface-container-high px-4 py-2 text-sm font-medium text-on-surface hover:bg-surface-container">
 <span class="material-symbols-outlined align-middle text-[18px] mr-1">videocam</span>
 Start Call
 </a>
+{% else %}
+<button type="button" disabled title="Start call activates at the appointment time" class="cursor-not-allowed rounded-lg bg-surface-container-high px-4 py-2 text-sm font-medium text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined align-middle text-[18px] mr-1">videocam</span>
+Start Call
+</button>
+{% endif %}
 <button
   type="button"
   class="open-rx-modal rounded-lg bg-primary text-on-primary px-4 py-2 text-sm font-semibold hover:opacity-90"

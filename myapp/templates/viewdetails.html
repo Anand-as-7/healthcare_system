@@ -250,7 +250,7 @@
           <div class="bg-surface-container-low border border-outline-variant/30 p-6 rounded-xl sticky top-24">
             <h3 class="font-headline-sm text-on-surface mb-6">Quick Actions</h3>
             <div class="flex flex-col gap-4">
-              {% if status == 'upcoming' and video.video_url %}
+              {% if can_join_call %}
               <a href="{% url 'videoconference' appointment.id %}" class="w-full bg-primary text-on-primary h-12 rounded-xl font-label-md flex items-center justify-center gap-2 shadow-md hover:opacity-90 transition-colors">
                 <span class="material-symbols-outlined">videocam</span>
                 Join Video Conference

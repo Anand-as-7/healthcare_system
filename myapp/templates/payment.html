@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Payment Gateway - MedStream</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-primary": "#b5c4ff",
+                        "on-primary-fixed": "#00174d",
+                        "background": "#f9f9ff",
+                        "primary-fixed": "#dbe1ff",
+                        "on-tertiary-fixed-variant": "#004f57",
+                        "on-error-container": "#93000a",
+                        "primary": "#003fb1",
+                        "secondary-fixed-dim": "#d2bbff",
+                        "outline-variant": "#c3c5d7",
+                        "outline": "#737686",
+                        "on-surface": "#151c27",
+                        "surface": "#f9f9ff",
+                        "surface-container-high": "#e2e8f8",
+                        "surface-container": "#e7eefe",
+                        "on-primary-container": "#d4dcff",
+                        "secondary-container": "#8b4aff",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#001f23",
+                        "on-secondary-fixed": "#25005a",
+                        "surface-tint": "#1353d8",
+                        "secondary": "#7127e5",
+                        "on-surface-variant": "#434654",
+                        "on-secondary-container": "#fffbff",
+                        "on-secondary-fixed-variant": "#5a00c6",
+                        "surface-variant": "#dce2f3",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "tertiary-container": "#006c77",
+                        "tertiary-fixed": "#92f1ff",
+                        "primary-container": "#1a56db",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#00525a",
+                        "surface-container-low": "#f0f3ff",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#d3daea",
+                        "secondary-fixed": "#eaddff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#82edfc",
+                        "on-primary-fixed-variant": "#003dab",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#6ad6e5",
+                        "on-background": "#151c27",
+                        "inverse-surface": "#2a313d",
+                        "inverse-on-surface": "#ebf1ff",
+                        "surface-container-highest": "#dce2f3",
+                        "surface-bright": "#f9f9ff"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "stack-lg": "32px",
+                        "unit": "8px",
+                        "margin-mobile": "16px",
+                        "container-max": "1440px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "section-padding": "64px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px"
+                    },
+                    fontFamily: {
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    fontSize: {
+                        "label-sm": ["12px", { lineHeight: "16px", fontWeight: "500" }],
+                        "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "headline-lg-mobile": ["28px", { lineHeight: "36px", fontWeight: "700" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "display-lg": ["48px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "700" }]
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-header {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .payment-option-active {
+            border-color: #1a56db;
+            background-color: #f0f3ff;
+        }
+
+        .field-error {
+            color: #ba1a1a;
+            font-size: 12px;
+            line-height: 16px;
+            min-height: 16px;
+        }
+
+        .is-invalid {
+            border-color: #ba1a1a !important;
+        }
+
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-20">
+    <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 glass-header shadow-sm h-14">
+        <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-full w-full max-w-container-max mx-auto">
+            <div class="flex items-center gap-4">
+                <button type="button" onclick="history.back()" class="hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 duration-200">
+                    <span class="material-symbols-outlined text-primary">arrow_back</span>
+                </button>
+                <h1 class="font-headline-sm text-headline-sm text-primary font-bold">Secure Payment</h1>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-1 bg-tertiary-container/10 border border-tertiary-container/20 rounded-full">
+                <span class="material-symbols-outlined text-tertiary-container text-[18px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+                <span class="font-label-sm text-label-sm text-tertiary">Encrypted</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20 px-margin-mobile md:px-margin-desktop max-w-4xl mx-auto">
+        {% if form.errors %}
+        <div class="mb-4 rounded-lg bg-error-container border border-red-200 p-3 text-sm text-on-error-container">
+            {% for field in form %}
+                {% for error in field.errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" id="paymentForm" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="expiry_month" id="expiry_month" value="{{ form.expiry_month.value|default:'' }}" />
+            <input type="hidden" name="expiry_year" id="expiry_year" value="{{ form.expiry_year.value|default:'' }}" />
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+                <section class="lg:col-span-5 flex flex-col gap-stack-md">
+                    <div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_6px_-1px_rgb(0_0_0/0.05)] border border-outline-variant/30">
+                        <h2 class="font-headline-sm text-headline-sm mb-stack-md text-on-surface">Appointment Summary</h2>
+                        <div class="flex items-center gap-4 mb-stack-lg p-4 bg-surface-container-low rounded-lg">
+                            {% if doctor.photo %}
+                            <img alt="{{ doctor.doctor_name }}" class="w-16 h-16 rounded-full object-cover border-2 border-primary-container/20" src="{{ doctor.photo.url }}" />
+                            {% else %}
+                            <img alt="Doctor" class="w-16 h-16 rounded-full object-cover border-2 border-primary-container/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7i1PSsLT44el1EwKLTg03lb0gBz8i03XFNF5D8IKhjou7ZeKRa88BdwsNuRQaIAV9-VRny_ytkfJU1S78P8hQt8Qw1lTOWyp1k3kyVSQAleq0bbm0ItAZQ2y6q6x4A3CMosYa8kgJ6d8fJArGwYqtelQDNbXxEfJ-NY9oP0jfKK839VVo0SxVgn7peqyr6C_g4owYXBsPEaU8m_MpBvbxXWTC391r1MbKrXNXVbFEX0F89zIfO0ySxRulUyi1_vaEoV6pIms4X-Dr" />
+                            {% endif %}
+                            <div>
+                                <p class="font-label-md text-label-md text-primary">{{ doctor.specialization }}</p>
+                                <p class="font-headline-sm text-headline-sm">{{ doctor.doctor_name }}</p>
+                            </div>
+                        </div>
+                        <div class="space-y-stack-md">
+                            <div class="flex items-center justify-between border-b border-outline-variant/20 pb-stack-sm">
+                                <div class="flex items-center gap-2 text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                                    <span class="font-body-md text-body-md">Date</span>
+                                </div>
+                                <span class="font-label-md text-label-md">{{ appointment.date|date:"M d, Y" }}</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-outline-variant/20 pb-stack-sm">
+                                <div class="flex items-center gap-2 text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-[20px]">schedule</span>
+                                    <span class="font-body-md text-body-md">Time</span>
+                                </div>
+                                <span class="font-label-md text-label-md">{{ appointment.time|time:"h:i A" }}</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-outline-variant/20 pb-stack-sm">
+                                <div class="flex items-center gap-2 text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-[20px]">location_on</span>
+                                    <span class="font-body-md text-body-md">Mode</span>
+                                </div>
+                                <span class="font-label-md text-label-md">Video Consultation</span>
+                            </div>
+                        </div>
+                        <div class="mt-stack-lg pt-stack-md border-t-2 border-dashed border-outline-variant/50">
+                            <div class="flex items-center justify-between">
+                                <span class="font-body-lg text-body-lg text-on-surface-variant">Consultation Fee</span>
+                                <span class="font-headline-md text-headline-md text-primary">&#8377;{{ amount }}.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center gap-4 py-4 px-6 bg-surface-container-high/30 rounded-xl border border-outline-variant/20">
+                        <span class="material-symbols-outlined text-tertiary text-4xl" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant">Your transaction is protected by 256-bit SSL encryption and HIPAA compliant servers.</p>
+                    </div>
+                </section>
+
+                <section class="lg:col-span-7 flex flex-col gap-stack-md">
+                    <div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_6px_-1px_rgb(0_0_0/0.05)] border border-outline-variant/30">
+                        <h2 class="font-headline-sm text-headline-sm mb-stack-lg text-on-surface">Select Payment Method</h2>
+                        <div class="space-y-stack-md">
+                            <div class="payment-method-container">
+                                <button type="button" class="w-full flex items-center justify-between p-4 rounded-lg border border-outline-variant hover:border-primary transition-all group" onclick="togglePayment('card-form')">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary">
+                                            <span class="material-symbols-outlined">credit_card</span>
+                                        </div>
+                                        <span class="font-label-md text-label-md">Credit / Debit Card</span>
+                                    </div>
+                                    <span class="material-symbols-outlined text-outline group-hover:text-primary">expand_more</span>
+                                </button>
+
+                                <div class="mt-stack-md p-4 bg-surface-container-low rounded-lg space-y-4" id="card-form">
+                                    <div class="space-y-1">
+                                        <label class="font-label-sm text-label-sm text-on-surface-variant">Card Number</label>
+                                        <div class="relative">
+                                            <input id="card_number" name="card_number" class="w-full h-11 bg-surface-container-lowest border border-outline-variant rounded-lg px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="0000 0000 0000 0000" type="text" value="{{ form.card_number.value|default:'' }}" inputmode="numeric" pattern="[0-9 ]{16,19}" maxlength="19" required />
+                                            <div class="absolute right-3 top-2.5 flex gap-1">
+                                                <div class="w-8 h-5 bg-outline-variant/30 rounded"></div>
+                                                <div class="w-8 h-5 bg-outline-variant/30 rounded"></div>
+                                            </div>
+                                        </div>
+                                        <p id="card_number_error" class="field-error"></p>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="space-y-1">
+                                            <label class="font-label-sm text-label-sm text-on-surface-variant">Expiry Date</label>
+                                            <input id="expiry_display" class="w-full h-11 bg-surface-container-lowest border border-outline-variant rounded-lg px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="MM/YY" type="text" value="{% if form.expiry_month.value and form.expiry_year.value %}{{ form.expiry_month.value|stringformat:'02d' }}/{{ form.expiry_year.value|stringformat:'s'|slice:'-2:' }}{% endif %}" required />
+                                            <p id="expiry_display_error" class="field-error"></p>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <label class="font-label-sm text-label-sm text-on-surface-variant">CVV</label>
+                                            <input id="cvv" name="cvv" class="w-full h-11 bg-surface-container-lowest border border-outline-variant rounded-lg px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="***" type="password" value="{{ form.cvv.value|default:'' }}" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" required />
+                                            <p id="cvv_error" class="field-error"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <label class="font-label-sm text-label-sm text-on-surface-variant">Cardholder Name</label>
+                                        <input id="person_name" name="person_name" class="w-full h-11 bg-surface-container-lowest border border-outline-variant rounded-lg px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="John Doe" type="text" value="{{ form.person_name.value|default:'' }}" pattern="[A-Za-z ]+" required />
+                                        <p id="person_name_error" class="field-error"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-method-container">
+                                <button type="button" class="w-full flex items-center justify-between p-4 rounded-lg border border-outline-variant hover:border-primary transition-all group" onclick="togglePayment('upi-form')">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-secondary-container/10 flex items-center justify-center text-secondary">
+                                            <span class="material-symbols-outlined">account_balance_wallet</span>
+                                        </div>
+                                        <span class="font-label-md text-label-md">UPI / Digital Wallets</span>
+                                    </div>
+                                    <span class="material-symbols-outlined text-outline group-hover:text-primary">expand_more</span>
+                                </button>
+                                <div class="hidden mt-stack-md p-4 bg-surface-container-low rounded-lg space-y-4" id="upi-form">
+                                    <div class="flex gap-4 mb-2 overflow-x-auto pb-2">
+                                        <button type="button" class="flex-shrink-0 px-4 py-2 bg-surface-container-lowest border border-primary rounded-full font-label-sm text-primary">Google Pay</button>
+                                        <button type="button" class="flex-shrink-0 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full font-label-sm">Apple Pay</button>
+                                        <button type="button" class="flex-shrink-0 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full font-label-sm">PayPal</button>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="font-label-sm text-label-sm text-on-surface-variant">Enter VPA / UPI ID</label>
+                                        <input class="w-full h-11 bg-surface-container-lowest border border-outline-variant rounded-lg px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="username@bank" type="text" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-method-container">
+                                <button type="button" class="w-full flex items-center justify-between p-4 rounded-lg border border-outline-variant hover:border-primary transition-all group" onclick="togglePayment('netbanking-form')">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-tertiary-container/10 flex items-center justify-center text-tertiary-container">
+                                            <span class="material-symbols-outlined">account_balance</span>
+                                        </div>
+                                        <span class="font-label-md text-label-md">Net Banking</span>
+                                    </div>
+                                    <span class="material-symbols-outlined text-outline group-hover:text-primary">expand_more</span>
+                                </button>
+                                <div class="hidden mt-stack-md p-4 bg-surface-container-low rounded-lg" id="netbanking-form">
+                                    <select class="w-full h-11 bg-surface-container-lowest border border-outline-variant rounded-lg px-4 focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                                        <option>Select your bank</option>
+                                        <option>Chase Bank</option>
+                                        <option>Bank of America</option>
+                                        <option>Wells Fargo</option>
+                                        <option>Citibank</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="w-full h-14 bg-primary text-on-primary rounded-xl font-headline-sm flex items-center justify-center gap-3 shadow-lg shadow-primary/20 hover:bg-primary/90 active:scale-[0.98] transition-all">
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">security</span>
+                            Pay &#8377;{{ amount }}.00 Now
+                        </button>
+                        <p class="text-center mt-4 font-body-sm text-on-surface-variant flex items-center justify-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">info</span>
+                            You will be redirected to the secure payment page
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        function togglePayment(formId) {
+            const forms = ['card-form', 'upi-form', 'netbanking-form'];
+            forms.forEach(id => {
+                const element = document.getElementById(id);
+                if (id === formId) {
+                    element.classList.toggle('hidden');
+                } else {
+                    element.classList.add('hidden');
+                }
+            });
+        }
+
+        function parseExpiryToFields() {
+            const raw = (document.getElementById('expiry_display').value || '').trim();
+            const match = raw.match(/^(\d{1,2})\s*\/\s*(\d{2}|\d{4})$/);
+            if (!match) {
+                return false;
+            }
+
+            const mm = parseInt(match[1], 10);
+            let yy = parseInt(match[2], 10);
+            if (mm < 1 || mm > 12) {
+                return false;
+            }
+            if (yy < 100) {
+                yy += 2000;
+            }
+
+            document.getElementById('expiry_month').value = mm;
+            document.getElementById('expiry_year').value = yy;
+            return true;
+        }
+
+        const form = document.getElementById('paymentForm');
+        const cardInput = document.getElementById('card_number');
+        const cvvInput = document.getElementById('cvv');
+        const nameInput = document.getElementById('person_name');
+        const expiryInput = document.getElementById('expiry_display');
+
+        function setFieldState(inputEl, errorEl, message) {
+            errorEl.textContent = message || '';
+            if (message) {
+                inputEl.classList.add('is-invalid');
+            } else {
+                inputEl.classList.remove('is-invalid');
+            }
+        }
+
+        function formatCardNumber() {
+            const digits = cardInput.value.replace(/\D/g, '').slice(0, 16);
+            cardInput.value = digits.replace(/(.{4})/g, '$1 ').trim();
+        }
+
+        function validateCardNumber() {
+            const digits = cardInput.value.replace(/\D/g, '');
+            const errorEl = document.getElementById('card_number_error');
+            if (!digits.length) {
+                setFieldState(cardInput, errorEl, 'Card number is required.');
+                return false;
+            }
+            if (digits.length !== 16) {
+                setFieldState(cardInput, errorEl, 'Card number must be exactly 16 digits.');
+                return false;
+            }
+            setFieldState(cardInput, errorEl, '');
+            return true;
+        }
+
+        function validateCvv() {
+            const value = cvvInput.value.trim();
+            const errorEl = document.getElementById('cvv_error');
+            if (!value.length) {
+                setFieldState(cvvInput, errorEl, 'CVV is required.');
+                return false;
+            }
+            if (!/^\d{3}$/.test(value)) {
+                setFieldState(cvvInput, errorEl, 'CVV must be exactly 3 digits.');
+                return false;
+            }
+            setFieldState(cvvInput, errorEl, '');
+            return true;
+        }
+
+        function validateCardholderName() {
+            const value = nameInput.value.trim();
+            const errorEl = document.getElementById('person_name_error');
+            if (!value.length) {
+                setFieldState(nameInput, errorEl, 'Cardholder name is required.');
+                return false;
+            }
+            if (!/^[A-Za-z ]+$/.test(value)) {
+                setFieldState(nameInput, errorEl, 'Name must contain letters only.');
+                return false;
+            }
+            if (value.replace(/\s/g, '').length < 2) {
+                setFieldState(nameInput, errorEl, 'Name is too short.');
+                return false;
+            }
+            setFieldState(nameInput, errorEl, '');
+            return true;
+        }
+
+        function validateExpiry() {
+            const errorEl = document.getElementById('expiry_display_error');
+            if (!expiryInput.value.trim()) {
+                setFieldState(expiryInput, errorEl, 'Expiry date is required.');
+                return false;
+            }
+            if (!parseExpiryToFields()) {
+                setFieldState(expiryInput, errorEl, 'Use MM/YY format.');
+                return false;
+            }
+            setFieldState(expiryInput, errorEl, '');
+            return true;
+        }
+
+        cardInput.addEventListener('input', function () {
+            formatCardNumber();
+            validateCardNumber();
+        });
+        cardInput.addEventListener('blur', validateCardNumber);
+        cvvInput.addEventListener('input', validateCvv);
+        cvvInput.addEventListener('blur', validateCvv);
+        nameInput.addEventListener('input', validateCardholderName);
+        nameInput.addEventListener('blur', validateCardholderName);
+        expiryInput.addEventListener('input', validateExpiry);
+        expiryInput.addEventListener('blur', validateExpiry);
+
+        form.addEventListener('submit', function (e) {
+            const isCardValid = validateCardNumber();
+            const isCvvValid = validateCvv();
+            const isNameValid = validateCardholderName();
+            const isExpiryValid = validateExpiry();
+            if (!(isCardValid && isCvvValid && isNameValid && isExpiryValid)) {
+                e.preventDefault();
+            }
+        });
+
+        document.getElementById('upi-form').classList.add('hidden');
+        document.getElementById('netbanking-form').classList.add('hidden');
+    </script>
+</body>
+</html>

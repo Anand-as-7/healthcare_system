@@ -1,0 +1,231 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Appointments - MedTech Global</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="{% static 'css/user.css' %}" rel="stylesheet" />
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            tertiary: "#00525a",
+            "on-tertiary-container": "#82edfc",
+            "on-primary-fixed-variant": "#003dab",
+            "on-background": "#151c27",
+            "inverse-surface": "#2a313d",
+            "on-primary-container": "#d4dcff",
+            "primary-fixed": "#dbe1ff",
+            "surface-tint": "#1353d8",
+            "surface-container-highest": "#dce2f3",
+            "primary-fixed-dim": "#b5c4ff",
+            "on-secondary-fixed": "#25005a",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed": "#00174d",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "on-tertiary": "#ffffff",
+            background: "#f9f9ff",
+            "surface-container-high": "#e2e8f8",
+            "on-tertiary-fixed-variant": "#004f57",
+            "on-tertiary-fixed": "#001f23",
+            "tertiary-container": "#006c77",
+            "surface-dim": "#d3daea",
+            "inverse-primary": "#b5c4ff",
+            "on-error": "#ffffff",
+            error: "#ba1a1a",
+            "secondary-fixed": "#eaddff",
+            "surface-bright": "#f9f9ff",
+            "on-surface": "#151c27",
+            "on-surface-variant": "#434654",
+            "secondary-fixed-dim": "#d2bbff",
+            "tertiary-fixed": "#92f1ff",
+            surface: "#f9f9ff",
+            "secondary-container": "#8b4aff",
+            "inverse-on-surface": "#ebf1ff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed-dim": "#6ad6e5",
+            "primary-container": "#1a56db",
+            secondary: "#7127e5",
+            "surface-variant": "#dce2f3",
+            "on-secondary-container": "#fffbff",
+            primary: "#003fb1",
+            "outline-variant": "#c3c5d7",
+            outline: "#737686",
+            "on-error-container": "#93000a"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "16px",
+            xl: "24px",
+            full: "9999px"
+          },
+          spacing: {
+            "section-padding": "64px",
+            "margin-desktop": "48px",
+            "stack-sm": "8px",
+            "stack-md": "16px",
+            gutter: "24px",
+            "container-max": "1440px",
+            "margin-mobile": "16px",
+            unit: "8px",
+            "stack-lg": "32px"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+
+<body class="bg-background text-on-surface min-h-screen">
+  <header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-stack-sm">
+      <span class="material-symbols-outlined text-primary">monitor_heart</span>
+      <h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">MedTech Global</h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high/50 p-2 rounded-full transition-colors">notifications</button>
+      <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+        <span class="material-symbols-outlined text-primary">account_circle</span>
+      </div>
+    </div>
+  </header>
+
+  <aside class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant/20 pt-16 z-40">
+    <div class="p-6 flex items-center gap-4 border-b border-outline-variant/10 mb-4">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+        <span class="material-symbols-outlined">account_circle</span>
+      </div>
+      <div>
+        <p class="font-label-md text-label-md text-on-surface font-bold">{{ user.name }}</p>
+        <p class="text-xs text-on-surface-variant">Patient ID: #{{ patient_code }}</p>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-1 px-3">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="font-body-md text-body-md">Home</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'userdoctorsview' %}">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="font-body-md text-body-md">Book Appointment</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-medium border-r-4 border-primary bg-primary/5 transition-colors" href="{% url 'user_appointmentsview' %}">
+        <span class="material-symbols-outlined">assignment_ind</span>
+        <span class="font-body-md text-body-md">View Appointments</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'logout' %}">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="font-body-md text-body-md">Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="pt-24 pb-10 md:pl-72 px-margin-mobile md:px-margin-desktop">
+    <div class="max-w-container-max mx-auto">
+      <section class="mb-stack-lg">
+        <h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">My Appointments</h2>
+        <p class="font-body-md text-on-surface-variant">View your booked appointments and receipts.</p>
+      </section>
+
+      <section class="mb-stack-lg">
+        <form method="get" class="relative">
+          <input type="hidden" name="status" value="{{ current_status }}" />
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+          <input
+            type="text"
+            name="search"
+            value="{{ search }}"
+            placeholder="Search doctor, specialty, or hospital..."
+            class="w-full h-12 pl-12 pr-4 bg-surface-container-lowest border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+          />
+        </form>
+
+        <div class="flex flex-wrap gap-2 mt-stack-md">
+          <a href="?status=upcoming{% if search %}&search={{ search|urlencode }}{% endif %}" class="px-5 py-2 rounded-full font-label-md {% if current_status == 'upcoming' %}bg-primary text-on-primary{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest{% endif %}">
+            Upcoming ({{ status_counts.upcoming }})
+          </a>
+          <a href="?status=completed{% if search %}&search={{ search|urlencode }}{% endif %}" class="px-5 py-2 rounded-full font-label-md {% if current_status == 'completed' %}bg-primary text-on-primary{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest{% endif %}">
+            Completed ({{ status_counts.completed }})
+          </a>
+          <a href="?status=cancelled{% if search %}&search={{ search|urlencode }}{% endif %}" class="px-5 py-2 rounded-full font-label-md {% if current_status == 'cancelled' %}bg-primary text-on-primary{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest{% endif %}">
+            Cancelled ({{ status_counts.cancelled }})
+          </a>
+          <a href="?status=all{% if search %}&search={{ search|urlencode }}{% endif %}" class="px-5 py-2 rounded-full font-label-md {% if current_status == 'all' %}bg-primary text-on-primary{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest{% endif %}">
+            All
+          </a>
+        </div>
+      </section>
+
+      <section>
+        {% if appointments %}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+          {% for row in appointments %}
+          <article class="bg-white rounded-xl shadow-sm p-5 border border-outline-variant/20">
+            <div class="flex justify-between items-start gap-3 mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-14 h-14 rounded-xl overflow-hidden bg-surface-container-high flex items-center justify-center">
+                  {% if row.appointment.doctorid.photo %}
+                  <img src="{{ row.appointment.doctorid.photo.url }}" alt="{{ row.appointment.doctorid.doctor_name }}" class="w-full h-full object-cover" />
+                  {% else %}
+                  <span class="material-symbols-outlined text-primary">medical_services</span>
+                  {% endif %}
+                </div>
+                <div>
+                  <h3 class="font-headline-sm text-on-surface">{{ row.appointment.doctorid.doctor_name }}</h3>
+                  <p class="text-sm text-on-surface-variant">{{ row.appointment.doctorid.specialization }}</p>
+                </div>
+              </div>
+
+              {% if row.status == 'upcoming' %}
+              <span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant text-xs font-semibold rounded-full">Upcoming</span>
+              {% elif row.status == 'completed' %}
+              <span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant text-xs font-semibold rounded-full">Completed</span>
+              {% else %}
+              <span class="px-3 py-1 bg-error-container text-on-error-container text-xs font-semibold rounded-full">Cancelled</span>
+              {% endif %}
+            </div>
+
+            <div class="space-y-2 mb-4 text-on-surface-variant">
+              <p class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">calendar_month</span>
+                {{ row.appointment.date|date:"M d, Y" }}  -  {{ row.appointment.time|time:"h:i A" }}
+              </p>
+              <p class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+                {{ row.appointment.doctorid.hospitalid.hospital_name }}
+              </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-3 border-t border-outline-variant/20">
+              <a href="{% url 'user_appointmentdetailsview' row.appointment.id %}" class="px-4 py-2 rounded-lg bg-primary text-on-primary text-sm font-medium hover:bg-primary/90 transition-colors">
+                View Details
+              </a>
+              <a href="{% url 'download_receipt' row.appointment.id %}" class="px-4 py-2 rounded-lg border border-outline text-primary text-sm font-medium hover:bg-surface-container-low transition-colors">
+                Download Receipt
+              </a>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-white rounded-xl shadow-sm p-8 border border-outline-variant/20 text-center">
+          <span class="material-symbols-outlined text-primary text-4xl">event_busy</span>
+          <h3 class="font-headline-sm mt-2 mb-1">No appointments found</h3>
+          <p class="text-on-surface-variant">Try changing filters or book a new appointment.</p>
+          <a href="{% url 'userdoctorsview' %}" class="inline-flex mt-4 px-4 py-2 rounded-lg bg-primary text-on-primary text-sm font-medium">Book Appointment</a>
+        </div>
+        {% endif %}
+      </section>
+    </div>
+  </main>
+</body>
+</html>

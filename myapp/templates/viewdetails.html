@@ -1,0 +1,313 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointment Details - MedTech Global</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="{% static 'css/user.css' %}" rel="stylesheet" />
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            tertiary: "#00525a",
+            "on-tertiary-container": "#82edfc",
+            "on-primary-fixed-variant": "#003dab",
+            "on-background": "#151c27",
+            "inverse-surface": "#2a313d",
+            "on-primary-container": "#d4dcff",
+            "primary-fixed": "#dbe1ff",
+            "surface-tint": "#1353d8",
+            "surface-container-highest": "#dce2f3",
+            "primary-fixed-dim": "#b5c4ff",
+            "on-secondary-fixed": "#25005a",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed": "#00174d",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "on-tertiary": "#ffffff",
+            background: "#f9f9ff",
+            "surface-container-high": "#e2e8f8",
+            "on-tertiary-fixed-variant": "#004f57",
+            "on-tertiary-fixed": "#001f23",
+            "tertiary-container": "#006c77",
+            "surface-dim": "#d3daea",
+            "inverse-primary": "#b5c4ff",
+            "on-error": "#ffffff",
+            error: "#ba1a1a",
+            "secondary-fixed": "#eaddff",
+            "surface-bright": "#f9f9ff",
+            "on-surface": "#151c27",
+            "on-surface-variant": "#434654",
+            "secondary-fixed-dim": "#d2bbff",
+            "tertiary-fixed": "#92f1ff",
+            surface: "#f9f9ff",
+            "secondary-container": "#8b4aff",
+            "inverse-on-surface": "#ebf1ff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed-dim": "#6ad6e5",
+            "primary-container": "#1a56db",
+            secondary: "#7127e5",
+            "surface-variant": "#dce2f3",
+            "on-secondary-container": "#fffbff",
+            primary: "#003fb1",
+            "outline-variant": "#c3c5d7",
+            outline: "#737686",
+            "on-error-container": "#93000a"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "16px",
+            xl: "24px",
+            full: "9999px"
+          },
+          spacing: {
+            "section-padding": "64px",
+            "margin-desktop": "48px",
+            "stack-sm": "8px",
+            "stack-md": "16px",
+            gutter: "24px",
+            "container-max": "1440px",
+            "margin-mobile": "16px",
+            unit: "8px",
+            "stack-lg": "32px"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+  <header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-stack-sm">
+      <span class="material-symbols-outlined text-primary">monitor_heart</span>
+      <h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">MedTech Global</h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high/50 p-2 rounded-full transition-colors">notifications</button>
+      <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+        <span class="material-symbols-outlined text-primary">account_circle</span>
+      </div>
+    </div>
+  </header>
+
+  <aside class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant/20 pt-16 z-40">
+    <div class="p-6 flex items-center gap-4 border-b border-outline-variant/10 mb-4">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+        <span class="material-symbols-outlined">account_circle</span>
+      </div>
+      <div>
+        <p class="font-label-md text-label-md text-on-surface font-bold">{{ user.name }}</p>
+        <p class="text-xs text-on-surface-variant">Patient ID: #{{ patient_code }}</p>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-1 px-3">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="font-body-md text-body-md">Home</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'userdoctorsview' %}">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="font-body-md text-body-md">Book Appointment</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-medium border-r-4 border-primary bg-primary/5 transition-colors" href="{% url 'user_appointmentsview' %}">
+        <span class="material-symbols-outlined">assignment_ind</span>
+        <span class="font-body-md text-body-md">View Appointments</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'logout' %}">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="font-body-md text-body-md">Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="pt-24 pb-10 md:pl-72 px-margin-mobile md:px-margin-desktop">
+    <div class="max-w-container-max mx-auto">
+      {% if messages %}
+      <section class="mb-stack-md space-y-2">
+        {% for message in messages %}
+        <div class="rounded-lg px-4 py-3 border {% if message.tags == 'error' %}bg-error-container/40 text-on-error-container border-error/30{% else %}bg-tertiary-fixed/30 text-on-surface border-outline-variant/30{% endif %}">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <div class="flex items-center gap-3 mb-stack-md">
+        <a href="{% url 'user_appointmentsview' %}" class="text-primary hover:text-primary/80">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h2 class="font-headline-lg text-headline-lg text-on-surface">Appointment Details</h2>
+      </div>
+
+      <section class="mb-stack-lg flex justify-between items-center bg-surface-container-low p-4 rounded-xl border border-outline-variant/30">
+        <div class="flex items-center gap-3">
+          {% if status == 'cancelled' %}
+          <span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">cancel</span>
+          <div>
+            <p class="text-sm text-on-surface-variant">Status</p>
+            <p class="font-label-md text-error">Cancelled</p>
+          </div>
+          {% elif status == 'completed' %}
+          <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+          <div>
+            <p class="text-sm text-on-surface-variant">Status</p>
+            <p class="font-label-md text-primary">Completed</p>
+          </div>
+          {% else %}
+          <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+          <div>
+            <p class="text-sm text-on-surface-variant">Status</p>
+            <p class="font-label-md text-primary">Upcoming</p>
+          </div>
+          {% endif %}
+        </div>
+        <div class="text-right">
+          <p class="text-sm text-on-surface-variant">Appointment ID</p>
+          <p class="font-label-md text-on-surface">#{{ appointment_code }}</p>
+        </div>
+      </section>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <section class="lg:col-span-8 flex flex-col gap-gutter">
+          <div class="bg-white rounded-xl shadow-sm p-6 border border-outline-variant/20 flex flex-col md:flex-row gap-6 items-center md:items-start">
+            <div class="w-32 h-32 rounded-2xl overflow-hidden bg-surface-container-high flex items-center justify-center">
+              {% if appointment.doctorid.photo %}
+              <img src="{{ appointment.doctorid.photo.url }}" alt="{{ appointment.doctorid.doctor_name }}" class="w-full h-full object-cover" />
+              {% else %}
+              <span class="material-symbols-outlined text-primary text-4xl">medical_services</span>
+              {% endif %}
+            </div>
+            <div class="flex-1 text-center md:text-left">
+              <div class="mb-2">
+                <span class="bg-tertiary-container/10 text-tertiary px-3 py-1 rounded-full text-label-sm font-label-md">{{ appointment.doctorid.specialization }}</span>
+              </div>
+              <h3 class="font-headline-md text-headline-md text-on-surface mb-1">{{ appointment.doctorid.doctor_name }}</h3>
+              <p class="text-on-surface-variant mb-4">{{ appointment.doctorid.experience }} Years Experience</p>
+              <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                <div class="flex items-center gap-1 text-label-md text-on-surface">
+                  <span class="material-symbols-outlined text-surface-tint text-[18px]">location_on</span>
+                  <span>{{ appointment.doctorid.hospitalid.hospital_name }}</span>
+                </div>
+                <div class="flex items-center gap-1 text-label-md text-on-surface">
+                  <span class="material-symbols-outlined text-surface-tint text-[18px]">currency_rupee</span>
+                  <span>{{ appointment.doctorid.consultation_fee }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-outline-variant/20">
+              <h4 class="font-label-md text-on-surface-variant mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                Schedule
+              </h4>
+              <p class="font-headline-sm text-on-surface">{{ appointment.date|date:"l, M d, Y" }}</p>
+              <p class="text-body-md text-on-surface-variant">{{ appointment.time|time:"h:i A" }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-outline-variant/20">
+              <h4 class="font-label-md text-on-surface-variant mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">videocam</span>
+                Consultation Type
+              </h4>
+              <p class="font-headline-sm text-on-surface">Video Consultation</p>
+              <p class="text-body-md text-on-surface-variant">Via MedTech Secure Link</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-outline-variant/20">
+            <h4 class="font-label-md text-on-surface-variant mb-4">Patient Notes</h4>
+            {% if prescription %}
+            <div class="space-y-4">
+              <div class="rounded-lg border border-outline-variant/20 bg-surface-container-lowest p-4">
+                <p class="text-xs font-semibold uppercase text-outline mb-2">Diagnosis</p>
+                <p class="text-body-md text-on-surface whitespace-pre-line">{{ prescription.diagnosis|default:"No diagnosis added." }}</p>
+              </div>
+              <div class="rounded-lg border border-outline-variant/20 bg-surface-container-lowest p-4">
+                <p class="text-xs font-semibold uppercase text-outline mb-2">Medicines</p>
+                <p class="text-body-md text-on-surface whitespace-pre-line">{{ prescription.medicines|default:"No medicines added." }}</p>
+              </div>
+              <div class="rounded-lg border border-outline-variant/20 bg-surface-container-lowest p-4">
+                <p class="text-xs font-semibold uppercase text-outline mb-2">Dosage</p>
+                <p class="text-body-md text-on-surface whitespace-pre-line">{{ prescription.dosage|default:"No dosage added." }}</p>
+              </div>
+            </div>
+            {% else %}
+            <p class="text-body-md text-on-surface">No prescription added for this appointment.</p>
+            {% endif %}
+          </div>
+        </section>
+
+        <aside class="lg:col-span-4">
+          <div class="bg-surface-container-low border border-outline-variant/30 p-6 rounded-xl sticky top-24">
+            <h3 class="font-headline-sm text-on-surface mb-6">Quick Actions</h3>
+            <div class="flex flex-col gap-4">
+              {% if status == 'upcoming' and video.video_url %}
+              <a href="{% url 'videoconference' appointment.id %}" class="w-full bg-primary text-on-primary h-12 rounded-xl font-label-md flex items-center justify-center gap-2 shadow-md hover:opacity-90 transition-colors">
+                <span class="material-symbols-outlined">videocam</span>
+                Join Video Conference
+              </a>
+              {% else %}
+              <button disabled class="w-full bg-surface-container-high text-on-surface-variant h-12 rounded-xl font-label-md flex items-center justify-center gap-2 cursor-not-allowed">
+                <span class="material-symbols-outlined">videocam</span>
+                Join Video Conference
+              </button>
+              {% if status == 'upcoming' %}
+              <p class="rounded-xl border border-outline-variant/30 bg-white px-4 py-3 text-sm leading-5 text-on-surface-variant">
+                The secure video link is not available yet. It will appear here after your doctor starts the call.
+              </p>
+              {% endif %}
+              {% endif %}
+
+              <a href="{% url 'download_receipt' appointment.id %}" class="w-full bg-white text-primary border border-primary h-12 rounded-xl font-label-md flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors">
+                <span class="material-symbols-outlined">receipt</span>
+                Download Receipt
+              </a>
+
+              <div class="h-px bg-outline-variant/30"></div>
+
+              {% if can_modify %}
+              <a href="{% url 'resheduleappointment' appointment.id %}" class="w-full bg-surface-container-high text-on-surface-variant h-12 rounded-xl font-label-md flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-colors">
+                <span class="material-symbols-outlined">event_repeat</span>
+                Reschedule
+              </a>
+              {% else %}
+              <button disabled class="w-full bg-surface-container-high text-on-surface-variant h-12 rounded-xl font-label-md flex items-center justify-center gap-2 cursor-not-allowed">
+                <span class="material-symbols-outlined">event_repeat</span>
+                Reschedule
+              </button>
+              {% endif %}
+
+              {% if can_modify %}
+              <a href="{% url 'cancelappointment' appointment.id %}" class="w-full text-error font-label-md flex items-center justify-center gap-2 h-12 rounded-xl hover:bg-error-container/40 transition-colors">
+                <span class="material-symbols-outlined">cancel</span>
+                Cancel Appointment
+              </a>
+              {% elif status == 'cancelled' %}
+              <button disabled class="w-full text-on-surface-variant font-label-md flex items-center justify-center gap-2 h-12 rounded-xl cursor-not-allowed">
+                <span class="material-symbols-outlined">cancel</span>
+                Appointment Cancelled
+              </button>
+              {% else %}
+              <button disabled class="w-full text-error font-label-md flex items-center justify-center gap-2 h-12 rounded-xl cursor-not-allowed">
+                <span class="material-symbols-outlined">cancel</span>
+                Cancel Appointment
+              </button>
+              {% endif %}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedTech Clinical | Video Conference</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: "#003fb1",
+        "primary-fixed": "#dbe1ff",
+        "on-primary": "#ffffff",
+        "on-surface": "#151c27",
+        "on-surface-variant": "#434654",
+        outline: "#737686",
+        "outline-variant": "#c3c5d7",
+        background: "#f9f9ff",
+        "surface-container-low": "#f0f3ff",
+        "surface-container-high": "#e2e8f8",
+        "surface-container-lowest": "#ffffff",
+        tertiary: "#00525a"
+      }
+    }
+  }
+}
+</script>
+<style>
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: "Inter", sans-serif;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+</style>
+</head>
+<body class="bg-background text-on-surface">
+<main id="callLobby" class="min-h-screen px-4 py-6 sm:px-6 lg:px-10">
+<div class="mx-auto flex min-h-[calc(100vh-3rem)] max-w-6xl items-center">
+<section class="grid w-full overflow-hidden rounded-2xl border border-outline-variant/30 bg-white shadow-xl lg:grid-cols-[1.05fr_0.95fr]">
+<div class="p-6 sm:p-8 lg:p-10">
+<a href="{{ back_url }}" class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-80">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+Back to Appointments
+</a>
+<div class="mt-8 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary-fixed px-4 py-2 text-sm font-semibold text-primary">
+<span class="material-symbols-outlined text-[18px]">videocam</span>
+Video Consultation
+</div>
+<h1 class="mt-5 text-3xl font-bold leading-tight text-on-surface sm:text-4xl">{% if can_save_url %}Start secure consultation{% else %}Join secure consultation{% endif %}</h1>
+<p class="mt-3 max-w-xl text-base text-on-surface-variant sm:text-lg">
+{% if can_save_url %}
+Review the appointment details, then join the call. The conference link is saved when you join.
+{% else %}
+Review the appointment details, then join the secure video room created by your doctor.
+{% endif %}
+</p>
+
+<div class="mt-8 grid gap-3 sm:grid-cols-2">
+<div class="rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-4">
+<p class="text-xs font-semibold uppercase text-outline">Patient</p>
+<p class="mt-2 text-xl font-semibold text-on-surface">{{ patient.name }}</p>
+</div>
+<div class="rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-4">
+<p class="text-xs font-semibold uppercase text-outline">Appointment</p>
+<p class="mt-2 text-xl font-semibold text-on-surface">#{{ appointment.id }}</p>
+</div>
+<div class="rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-4">
+<p class="text-xs font-semibold uppercase text-outline">Date</p>
+<p class="mt-2 text-lg font-semibold text-on-surface">{{ appointment.date|date:"M d, Y" }}</p>
+</div>
+<div class="rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-4">
+<p class="text-xs font-semibold uppercase text-outline">Time</p>
+<p class="mt-2 text-lg font-semibold text-on-surface">{{ appointment.time|time:"h:i A" }}</p>
+</div>
+</div>
+</div>
+
+<div class="flex flex-col justify-between bg-surface-container-low p-6 sm:p-8 lg:p-10">
+<div>
+<div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-on-primary">
+<span class="material-symbols-outlined text-[34px]">video_call</span>
+</div>
+<h2 class="mt-6 text-2xl font-bold text-on-surface">Ready room</h2>
+<p class="mt-2 text-sm leading-6 text-on-surface-variant">Your camera and microphone will start after joining. Shareable room ID: <span class="font-semibold text-on-surface">{{ room_id }}</span></p>
+{% if video %}
+<div class="mt-5 rounded-xl border border-primary/15 bg-white p-4 text-sm text-on-surface-variant">
+<p class="font-semibold text-on-surface">Existing call link found</p>
+<p class="mt-1 break-all">{{ video.video_url }}</p>
+</div>
+{% endif %}
+</div>
+
+<div class="mt-8">
+<p id="saveStatus" class="mb-3 hidden rounded-lg border px-3 py-2 text-sm"></p>
+<button id="joinCallBtn" type="button" class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-on-primary shadow-lg hover:opacity-90">
+<span class="material-symbols-outlined text-[20px]">login</span>
+Join Call
+</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+
+<div id="root" class="hidden"></div>
+
+<script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+<script>
+(function () {
+  const joinButton = document.getElementById("joinCallBtn");
+  const lobby = document.getElementById("callLobby");
+  const root = document.getElementById("root");
+  const saveStatus = document.getElementById("saveStatus");
+  const roomID = "{{ room_id|escapejs }}";
+  const userID = "{{ participant_id|escapejs }}";
+  const userName = "{{ participant_name|escapejs }}";
+  const saveUrl = "{{ save_url|escapejs }}";
+  const canSaveUrl = "{{ can_save_url|yesno:'1,0' }}" === "1";
+  const csrfToken = "{{ csrf_token }}";
+  const meetingUrl = window.location.origin + window.location.pathname + "?roomID=" + encodeURIComponent(roomID);
+
+  function setStatus(message, isError) {
+    saveStatus.textContent = message;
+    saveStatus.className = "mb-3 rounded-lg border px-3 py-2 text-sm " + (
+      isError
+        ? "border-red-200 bg-red-50 text-red-700"
+        : "border-primary/20 bg-primary-fixed text-on-surface"
+    );
+  }
+
+  function startZegoRoom() {
+    const appID = 463308570;
+    const serverSecret = "9c04adcc7fba55a4c072c145ed3e0ac5";
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
+    const zp = ZegoUIKitPrebuilt.create(kitToken);
+
+    lobby.classList.add("hidden");
+    root.classList.remove("hidden");
+
+    zp.joinRoom({
+      container: root,
+      sharedLinks: [{
+        name: "Personal link",
+        url: meetingUrl,
+      }],
+      scenario: {
+        mode: ZegoUIKitPrebuilt.VideoConference,
+      },
+      turnOnMicrophoneWhenJoining: true,
+      turnOnCameraWhenJoining: true,
+      showMyCameraToggleButton: true,
+      showMyMicrophoneToggleButton: true,
+      showAudioVideoSettingsButton: true,
+      showScreenSharingButton: true,
+      showTextChat: true,
+      showUserList: true,
+      maxUsers: 50,
+      layout: "Auto",
+      showLayoutButton: true,
+    });
+  }
+
+  joinButton.addEventListener("click", async function () {
+    joinButton.disabled = true;
+    joinButton.classList.add("opacity-70", "cursor-wait");
+    setStatus(canSaveUrl ? "Saving conference link..." : "Joining secure video room...", false);
+
+    try {
+      if (canSaveUrl) {
+        const response = await fetch(saveUrl, {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          body: JSON.stringify({ url: meetingUrl }),
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || "Could not save conference link");
+        }
+      }
+
+      startZegoRoom();
+    } catch (error) {
+      setStatus(error.message, true);
+      joinButton.disabled = false;
+      joinButton.classList.remove("opacity-70", "cursor-wait");
+    }
+  });
+})();
+</script>
+</body>
+</html>

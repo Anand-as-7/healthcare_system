@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="{% static 'css/user.css' %}" rel="stylesheet"/>
+<link href="{% static 'css/dashboard-polish.css' %}" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -143,9 +144,13 @@
 <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
 <span class="font-body-md text-body-md">Book Appointment</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}#appointments">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_appointmentsview' %}">
 <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
 <span class="font-body-md text-body-md">View Appointments</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_complaints' %}">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span class="font-body-md text-body-md">Complaints</span>
 </a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'logout' %}">
 <span class="material-symbols-outlined" data-icon="logout">logout</span>

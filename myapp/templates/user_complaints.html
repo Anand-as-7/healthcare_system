@@ -1,0 +1,414 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <title>Complaints | MedTech Global</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="{% static 'css/user.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/dashboard-polish.css' %}" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#001f23",
+                        "on-tertiary-container": "#82edfc",
+                        "tertiary-fixed-dim": "#6ad6e5",
+                        "secondary-fixed": "#eaddff",
+                        "on-primary-fixed": "#00174d",
+                        "secondary-container": "#8b4aff",
+                        "inverse-primary": "#b5c4ff",
+                        "surface-container-high": "#e2e8f8",
+                        "background": "#f9f9ff",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "outline": "#737686",
+                        "inverse-on-surface": "#ebf1ff",
+                        "surface-bright": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d3daea",
+                        "on-surface-variant": "#434654",
+                        "on-surface": "#151c27",
+                        "tertiary": "#00525a",
+                        "on-primary-container": "#d4dcff",
+                        "on-secondary-container": "#fffbff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#e7eefe",
+                        "tertiary-fixed": "#92f1ff",
+                        "surface-variant": "#dce2f3",
+                        "on-primary-fixed-variant": "#003dab",
+                        "surface-tint": "#1353d8",
+                        "error-container": "#ffdad6",
+                        "surface": "#f9f9ff",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#dce2f3",
+                        "primary-container": "#1a56db",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#004f57",
+                        "secondary-fixed-dim": "#d2bbff",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#c3c5d7",
+                        "on-secondary-fixed": "#25005a",
+                        "tertiary-container": "#006c77",
+                        "primary": "#003fb1",
+                        "surface-container-low": "#f0f3ff",
+                        "secondary": "#7127e5",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#151c27",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "16px",
+                        "xl": "24px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-padding": "64px",
+                        "unit": "8px",
+                        "stack-sm": "8px",
+                        "margin-desktop": "48px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-header {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .input-focus-ring:focus {
+            box-shadow: 0 0 0 4px rgba(26, 86, 219, 0.1);
+            border-color: #1a56db;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #dce2f3;
+            border-radius: 4px;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-surface min-h-screen font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+    <!-- Top App Bar (Shared Component) -->
+    <header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop">
+        <div class="flex items-center gap-stack-sm">
+            <span class="material-symbols-outlined text-primary" data-icon="monitor_heart">monitor_heart</span>
+            <h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">MedTech Global</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high/50 p-2 rounded-full transition-colors active:scale-95 duration-200" data-icon="notifications">notifications</button>
+            <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+                <span class="material-symbols-outlined text-primary">account_circle</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation (Desktop) -->
+    <aside class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant/20 pt-16 z-40">
+        <div class="p-6 flex items-center gap-4 border-b border-outline-variant/10 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+                <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+            </div>
+            <div>
+                <p class="font-label-md text-label-md text-on-surface font-bold">{{ user.name }}</p>
+                <p class="text-xs text-on-surface-variant">Patient ID: #{{ patient_code }}</p>
+            </div>
+        </div>
+        <nav class="flex flex-col gap-1 px-3">
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}">
+                <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                <span class="font-body-md text-body-md">Home</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'userdoctorsview' %}">
+                <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+                <span class="font-body-md text-body-md">Book Appointment</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_appointmentsview' %}">
+                <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+                <span class="font-body-md text-body-md">View Appointments</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors" href="{% url 'user_complaints' %}">
+                <span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+                <span class="font-body-md text-body-md">Complaints</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'logout' %}">
+                <span class="material-symbols-outlined" data-icon="logout">logout</span>
+                <span class="font-body-md text-body-md">Logout</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-32 md:pb-8 md:pl-72 px-margin-mobile md:px-margin-desktop transition-all duration-300">
+        <div class="max-w-2xl mx-auto">
+        {% if messages %}
+        <section class="mb-stack-md space-y-2">
+            {% for message in messages %}
+            <div
+                class="rounded-lg border px-4 py-3 text-sm {% if message.tags == 'success' %}border-tertiary/30 bg-tertiary/10 text-tertiary{% elif message.tags == 'error' %}border-error/30 bg-error-container/40 text-on-error-container{% else %}border-outline-variant/30 bg-surface-container-low text-on-surface{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        <!-- Instructional Header -->
+        <section class="mb-stack-lg animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <h2
+                class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-stack-sm">
+                {% if editing_complaint %}Edit Complaint{% else %}Help &amp; Support{% endif %}</h2>
+            <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                Your feedback helps us provide a better healthcare experience. Please share any concerns or suggestions
+                below; our patient advocacy team will review your message within 24 hours.
+            </p>
+        </section>
+        <!-- Complaint Form -->
+        <form class="space-y-stack-md animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-150"
+            id="complaintForm" method="post">
+            {% csrf_token %}
+            <input name="action" type="hidden" value="save" />
+            {% if editing_complaint %}
+            <input name="complaint_id" type="hidden" value="{{ editing_complaint.id }}" />
+            {% endif %}
+            <!-- Category Selection (Chips) -->
+            <div class="space-y-stack-sm">
+                <label class="font-label-md text-label-md text-on-surface-variant block px-1">Category</label>
+                <div class="flex flex-wrap gap-2">
+                    <button
+                        class="category-chip px-4 py-2 rounded-full border font-label-md hover:bg-surface-container-low transition-all active:scale-95 {% if form.category.value == 'Billing' %}bg-primary-container text-on-primary-container border-primary-container{% else %}border-outline-variant text-on-surface-variant{% endif %}"
+                        data-category="Billing" type="button">Billing</button>
+                    <button
+                        class="category-chip px-4 py-2 rounded-full border font-label-md hover:bg-surface-container-low transition-all active:scale-95 {% if form.category.value == 'Service' %}bg-primary-container text-on-primary-container border-primary-container{% else %}border-outline-variant text-on-surface-variant{% endif %}"
+                        data-category="Service" type="button">Service</button>
+                    <button
+                        class="category-chip px-4 py-2 rounded-full border font-label-md hover:bg-surface-container-low transition-all active:scale-95 {% if form.category.value == 'Medical' %}bg-primary-container text-on-primary-container border-primary-container{% else %}border-outline-variant text-on-surface-variant{% endif %}"
+                        data-category="Medical" type="button">Medical</button>
+                    <button
+                        class="category-chip px-4 py-2 rounded-full border font-label-md hover:bg-surface-container-low transition-all active:scale-95 {% if form.category.value == 'Technical' %}bg-primary-container text-on-primary-container border-primary-container{% else %}border-outline-variant text-on-surface-variant{% endif %}"
+                        data-category="Technical" type="button">Technical</button>
+                </div>
+                <input id="selectedCategory" name="category" required="" type="hidden" value="{{ form.category.value|default:'Service' }}" />
+                {% if form.category.errors %}
+                <p class="text-sm text-error px-1">{{ form.category.errors|striptags }}</p>
+                {% endif %}
+            </div>
+            <!-- Subject Input -->
+            <div class="space-y-stack-sm">
+                <label class="font-label-md text-label-md text-on-surface-variant block px-1"
+                    for="subject">Subject</label>
+                {{ form.subject }}
+                {% if form.subject.errors %}
+                <p class="text-sm text-error px-1">{{ form.subject.errors|striptags }}</p>
+                {% endif %}
+            </div>
+            <!-- Description Textarea -->
+            <div class="space-y-stack-sm">
+                <label class="font-label-md text-label-md text-on-surface-variant block px-1" for="description">Detailed
+                    Description</label>
+                {{ form.message }}
+                {% if form.message.errors %}
+                <p class="text-sm text-error px-1">{{ form.message.errors|striptags }}</p>
+                {% endif %}
+            </div>
+            <!-- Submit Button -->
+            <div class="flex flex-col sm:flex-row gap-3 mt-stack-lg">
+                {% if editing_complaint %}
+                <a href="{% url 'user_complaints' %}"
+                    class="h-14 sm:w-36 border border-outline-variant text-on-surface-variant font-label-md rounded-lg hover:bg-surface-container-low transition-all flex items-center justify-center">
+                    Cancel
+                </a>
+                {% endif %}
+                <button
+                    class="flex-1 h-14 bg-primary-container text-on-primary-container font-headline-sm text-headline-sm rounded-lg shadow-lg hover:shadow-xl hover:brightness-110 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2"
+                    type="submit">
+                    <span>{% if editing_complaint %}Update Complaint{% else %}Submit Complaint{% endif %}</span>
+                    <span class="material-symbols-outlined">{% if editing_complaint %}save{% else %}send{% endif %}</span>
+                </button>
+            </div>
+        </form>
+
+        <section class="mt-12">
+            <div class="flex items-center justify-between gap-4 mb-stack-md">
+                <div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-surface">My Complaints</h3>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Track and manage submitted feedback.</p>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-label-sm font-label-md">{{ complaints|length }} total</span>
+            </div>
+
+            <div class="space-y-3">
+                {% for complaint in complaints %}
+                <article class="rounded-lg border border-outline-variant/30 bg-surface-container-lowest p-4 shadow-sm">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-2">
+                                <span class="rounded-full bg-primary-fixed px-3 py-1 text-label-sm font-label-md text-primary">{{ complaint.category }}</span>
+                                <span class="text-label-sm text-outline">{{ complaint.submitted_at|date:"M d, Y h:i A" }}</span>
+                            </div>
+                            <h4 class="font-label-md text-label-md text-on-surface">{{ complaint.subject }}</h4>
+                            <p class="mt-1 font-body-sm text-body-sm text-on-surface-variant whitespace-pre-line">{{ complaint.message|default:"No details added." }}</p>
+                        </div>
+                        <div class="flex shrink-0 gap-2">
+                            <a href="{% url 'user_complaints' %}?edit={{ complaint.id }}"
+                                class="inline-flex h-9 items-center justify-center gap-1 rounded-lg border border-outline-variant px-3 text-sm text-on-surface-variant hover:bg-surface-container-low">
+                                <span class="material-symbols-outlined text-[18px]">edit</span>
+                                Edit
+                            </a>
+                            <form method="post" onsubmit="return confirm('Delete this complaint?');">
+                                {% csrf_token %}
+                                <input name="action" type="hidden" value="delete" />
+                                <input name="complaint_id" type="hidden" value="{{ complaint.id }}" />
+                                <button type="submit"
+                                    class="inline-flex h-9 items-center justify-center gap-1 rounded-lg border border-error/30 px-3 text-sm text-error hover:bg-error-container/40">
+                                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="rounded-lg border border-dashed border-outline-variant p-6 text-center">
+                    <span class="material-symbols-outlined text-primary text-3xl">support_agent</span>
+                    <p class="mt-2 font-label-md text-on-surface">No complaints submitted yet.</p>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Use the form above to contact support.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Support Info Cards (Bento style) -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+            <div
+                class="p-stack-md rounded-lg bg-surface-container-low border border-outline-variant/30 flex items-start gap-4">
+                <div
+                    class="w-10 h-10 rounded-full bg-tertiary-container/10 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-tertiary">support_agent</span>
+                </div>
+                <div>
+                    <h4 class="font-label-md text-label-md text-on-surface mb-1">Live Support</h4>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Available Mon-Fri, 9am - 6pm for urgent
+                        technical assistance.</p>
+                </div>
+            </div>
+            <div
+                class="p-stack-md rounded-lg bg-surface-container-low border border-outline-variant/30 flex items-start gap-4">
+                <div
+                    class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-primary">verified_user</span>
+                </div>
+                <div>
+                    <h4 class="font-label-md text-label-md text-on-surface mb-1">Secure &amp; Private</h4>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Your feedback is encrypted and handled
+                        per HIPAA guidelines.</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+    <!-- Bottom Nav Bar (Shared Component - Mobile Only) -->
+    <nav class="fixed bottom-0 w-full z-50 md:hidden bg-surface dark:bg-inverse-surface shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] flex justify-around items-center h-16 pb-safe">
+        <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-all active:scale-90 duration-150" href="{% url 'user_dashboard' %}">
+            <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+            <span class="font-label-sm text-label-sm">Home</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-all active:scale-90 duration-150" href="{% url 'userdoctorsview' %}">
+            <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+            <span class="font-label-sm text-label-sm">Book</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-all active:scale-90 duration-150" href="{% url 'user_appointmentsview' %}">
+            <span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+            <span class="font-label-sm text-label-sm">Records</span>
+        </a>
+        <a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1 scale-105 transition-all" href="{% url 'user_complaints' %}">
+            <span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+            <span class="font-label-sm text-label-sm">Complaints</span>
+        </a>
+    </nav>
+    <script>
+        // Category Chip Logic
+        const chips = document.querySelectorAll('.category-chip');
+        const categoryInput = document.getElementById('selectedCategory');
+
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                // Reset all chips
+                chips.forEach(c => {
+                    c.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-primary-container');
+                    c.classList.add('border-outline-variant', 'text-on-surface-variant');
+                });
+
+                // Select active chip
+                chip.classList.add('bg-primary-container', 'text-on-primary-container', 'border-primary-container');
+                chip.classList.remove('border-outline-variant', 'text-on-surface-variant');
+
+                // Update hidden input
+                categoryInput.value = chip.dataset.category;
+            });
+        });
+
+    </script>
+</body>
+
+</html>

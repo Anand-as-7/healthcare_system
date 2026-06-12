@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Booking Confirmed | MedStream</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        @keyframes subtle-float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .animate-float {
+            animation: subtle-float 6s ease-in-out infinite;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c3c5d7",
+                        "on-secondary-fixed-variant": "#5a00c6",
+                        "on-error-container": "#93000a",
+                        "primary-container": "#1a56db",
+                        "tertiary-container": "#006c77",
+                        "surface-bright": "#f9f9ff",
+                        "on-surface": "#151c27",
+                        "on-secondary-fixed": "#25005a",
+                        "secondary-fixed-dim": "#d2bbff",
+                        "surface-container": "#e7eefe",
+                        "surface-variant": "#dce2f3",
+                        "surface-container-high": "#e2e8f8",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b5c4ff",
+                        "outline": "#737686",
+                        "tertiary": "#00525a",
+                        "primary-fixed-dim": "#b5c4ff",
+                        "on-tertiary-fixed": "#001f23",
+                        "surface-tint": "#1353d8",
+                        "surface-container-highest": "#dce2f3",
+                        "inverse-on-surface": "#ebf1ff",
+                        "on-tertiary-fixed-variant": "#004f57",
+                        "secondary": "#7127e5",
+                        "on-primary-container": "#d4dcff",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#82edfc",
+                        "surface-dim": "#d3daea",
+                        "on-background": "#151c27",
+                        "inverse-surface": "#2a313d",
+                        "surface": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#eaddff",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#00174d",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#8b4aff",
+                        "tertiary-fixed": "#92f1ff",
+                        "on-secondary-container": "#fffbff",
+                        "on-primary-fixed-variant": "#003dab",
+                        "background": "#f9f9ff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#003fb1",
+                        "on-surface-variant": "#434654",
+                        "tertiary-fixed-dim": "#6ad6e5",
+                        "surface-container-low": "#f0f3ff",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "stack-lg": "32px",
+                        "unit": "8px",
+                        "margin-mobile": "16px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "margin-desktop": "48px",
+                        "section-padding": "64px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md min-h-screen pb-20 md:pb-0 md:pt-14">
+    <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-sm">
+        <div
+            class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-14 w-full max-w-container-max mx-auto">
+            <div class="flex items-center gap-4">
+                <button type="button" onclick="history.back()"
+                    class="material-symbols-outlined text-primary dark:text-primary-fixed hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 duration-200">arrow_back</button>
+                <span
+                    class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">MedStream</span>
+            </div>
+            <div class="h-8 w-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant">
+                <img alt="Profile" class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ4-Q1BuESJ-j_cKNEgjC3EeLPEwpzuB408XCnSPHzx0CrrCkHv29LA4-2C6_yQks_wz-PWUnQPKsM-7wndkKaa44HREYl9W9MTaKhyCvc53PGZoMunZJUs6hNS0ncdtrpMhSZHmKfpeNE8rZ9-oycI2edHvOsJ42gZeXaIdikv3ezT8p6oonKcT30OssCZCpNbBiMzpv5svF5mLNpd4Ug5m-mWlIEbmZLikUAjhM8EjQoAx8oGM689fSpNnJFMDjelbHTM_MLc9sN" />
+            </div>
+        </div>
+    </header>
+    <main class="max-w-3xl mx-auto px-margin-mobile py-stack-lg md:py-16">
+        <div class="text-center mb-stack-lg animate-float">
+            <div
+                class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary-container text-on-primary-container mb-stack-md shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined text-[40px]"
+                    style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            </div>
+            <h1
+                class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-2">
+                Booking Confirmed</h1>
+            <p class="font-body-md text-body-md text-on-surface-variant">Your appointment has been successfully
+                scheduled and confirmed.</p>
+        </div>
+        <div class="glass-card rounded-xl shadow-xl border border-outline-variant/30 overflow-hidden mb-stack-lg">
+            <div class="p-6 md:p-8">
+                <div
+                    class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-outline-variant/50">
+                    <div>
+                        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">
+                            Appointment ID</p>
+                        <p class="font-headline-sm text-headline-sm text-primary font-bold">#MS-{{ appointment.id }}</p>
+                    </div>
+                    <a href="{% url 'download_receipt' appointment.id %}"
+                        class="flex items-center gap-2 text-primary hover:bg-primary/5 px-4 py-2 rounded-lg transition-colors font-label-md text-label-md">
+                        <span class="material-symbols-outlined text-[20px]">download</span>
+                        Download Receipt
+                    </a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12 pt-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-full bg-surface-container overflow-hidden flex-shrink-0">
+                            {% if appointment.doctorid.photo %}
+                            <img class="w-full h-full object-cover" src="{{ appointment.doctorid.photo.url }}" />
+                            {% else %}
+                            <img class="w-full h-full object-cover"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM8UgTWz45E_HgAfr6QFDay_9ChjzTQNYLH-Fq77p1R-GSWv9Xr7HPeImvWSUuJmtLa-6Ni81KZV_nAhvX5nWIwtRLMK4G2yC_CZEyDwIC24BRJcsF0A9ewV2WPBRP2B2_SRLARS2_AD0Td0ad4IHnXEUPeaMwnn_wcm4jQMPd6d8_Yn_PyIamywK35_CfQzWWHB_RpIh4_qwkHqXCBjifF6y8ENP6dz8wucvXzAzAZ5YNigeH9-sFHWFFbnzLc9YR4oHAn5JACZfJ" />
+                            {% endif %}
+                        </div>
+                        <div>
+                            <p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5">Physician</p>
+                            <p class="font-body-lg text-body-lg font-semibold text-on-surface">{{ appointment.doctorid.doctor_name }}</p>
+                            <p class="font-body-sm text-body-sm text-on-surface-variant">{{ appointment.doctorid.specialization }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-secondary-container/20 flex items-center justify-center text-secondary flex-shrink-0">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                        </div>
+                        <div>
+                            <p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5">Date &amp; Time</p>
+                            <p class="font-body-lg text-body-lg font-semibold text-on-surface">{{ appointment.date|date:"M d, Y" }}</p>
+                            <p class="font-body-sm text-body-sm text-on-surface-variant">{{ appointment.time|time:"h:i A" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-surface-container-low px-6 py-4 flex items-center justify-between">
+                <span class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-[20px]">videocam</span>
+                    Video Consultation
+                </span>
+                <span
+                    class="bg-primary-container/20 text-on-primary-fixed-variant px-3 py-1 rounded-full font-label-sm text-label-sm">Paid</span>
+            </div>
+        </div>
+        <section class="mb-stack-lg">
+            <h2 class="font-headline-sm text-headline-sm text-on-surface mb-stack-md">Next Steps</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 rounded-xl border border-outline-variant bg-surface-container-lowest flex gap-4">
+                    <div
+                        class="w-10 h-10 rounded-full bg-tertiary-container/10 flex items-center justify-center text-tertiary shrink-0">
+                        <span class="material-symbols-outlined">event_available</span>
+                    </div>
+                    <div>
+                        <h3 class="font-label-md text-label-md text-on-surface font-bold">Check Your Appointment</h3>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant">The appointment link will be
+                            available at your scheduled time. Check it on the Appointments page.</p>
+                    </div>
+                </div>
+                <div class="p-4 rounded-xl border border-outline-variant bg-surface-container-lowest flex gap-4">
+                    <div
+                        class="w-10 h-10 rounded-full bg-secondary-container/10 flex items-center justify-center text-secondary shrink-0">
+                        <span class="material-symbols-outlined">description</span>
+                    </div>
+                    <div>
+                        <h3 class="font-label-md text-label-md text-on-surface font-bold">Prescription</h3>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant">Your prescription will be added
+                            by the doctor. Check it on the Appointments page.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="{% url 'user_dashboard' %}"
+                class="flex-1 bg-surface-container-high text-on-surface font-label-md text-label-md h-12 rounded-xl flex items-center justify-center gap-2 hover:bg-surface-variant transition-all active:scale-95 duration-200">
+                <span class="material-symbols-outlined">list_alt</span>
+                View My Appointments
+            </a>
+        </div>
+        <div class="mt-12 text-center">
+            <p class="font-body-sm text-body-sm text-on-surface-variant">
+                Need to reschedule or cancel?
+                <a class="text-primary font-semibold hover:underline decoration-2 underline-offset-4" href="#">Manage
+                    Booking</a>
+            </p>
+        </div>
+    </main>
+    <nav
+        class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline shadow-lg">
+        <div class="flex justify-around items-center w-full h-16 pb-safe px-4">
+            <div
+                class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-all active:scale-90 duration-150 p-2 cursor-pointer">
+                <span class="material-symbols-outlined">home</span>
+                <span class="font-label-sm text-label-sm">Home</span>
+            </div>
+            <div
+                class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-all active:scale-90 duration-150 p-2 cursor-pointer">
+                <span class="material-symbols-outlined">search</span>
+                <span class="font-label-sm text-label-sm">Search</span>
+            </div>
+            <div
+                class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-150 cursor-pointer">
+                <span class="material-symbols-outlined"
+                    style="font-variation-settings: 'FILL' 1;">event_available</span>
+                <span class="font-label-sm text-label-sm">Appointments</span>
+            </div>
+            <div
+                class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-all active:scale-90 duration-150 p-2 cursor-pointer">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-label-sm text-label-sm">Profile</span>
+            </div>
+        </div>
+    </nav>
+    <script>
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const icon = this.querySelector('.material-symbols-outlined');
+                if (icon) {
+                    icon.style.transition = 'transform 0.2s ease';
+                    icon.style.transform = 'scale(1.2)';
+                    setTimeout(() => icon.style.transform = 'scale(1)', 200);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

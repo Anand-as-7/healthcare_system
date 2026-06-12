@@ -114,6 +114,19 @@
       color: #b7bac8;
       cursor: not-allowed;
     }
+
+    .calendar-day.has-slots::after {
+      content: "";
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: #1a56db;
+      opacity: 0.9;
+    }
   </style>
 </head>
 
@@ -148,9 +161,9 @@
         <span class="material-symbols-outlined">dashboard</span>
         <span class="font-body-md text-body-md">Home</span>
       </a>
-      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors" href="{% url 'userdoctorsview' %}">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary border-r-4 border-primary bg-primary/5 transition-colors" href="{% url 'userdoctorsview' %}">
         <span class="material-symbols-outlined">calendar_month</span>
-        <span class="font-body-md text-body-md">Book Appointment</span>
+        <span class="font-body-md text-body-md font-medium">Book Appointment</span>
       </a>
       <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}#appointments">
         <span class="material-symbols-outlined">assignment_ind</span>
@@ -236,7 +249,7 @@
             <input type="hidden" id="calendarDate" name="date" value="{{ selected_date|default:today_date }}" />
           </form>
 
-          <div class="grid grid-cols-7 text-center gap-2 text-on-surface-variant mb-2">
+          <div class="grid grid-cols-7 text-center gap-2 text-on-surface-variant mb-3">
             <div class="font-label-sm">Mo</div>
             <div class="font-label-sm">Tu</div>
             <div class="font-label-sm">We</div>
@@ -245,13 +258,19 @@
             <div class="font-label-sm">Sa</div>
             <div class="font-label-sm">Su</div>
           </div>
-          <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
+          <div id="calendarGrid" class="grid grid-cols-7 gap-x-2 gap-y-3"></div>
+          <p class="mt-4 text-xs text-on-surface-variant flex items-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-primary"></span>
+            Dot means slots available
+          </p>
         </div>
 
         <div class="glass-card rounded-xl shadow-sm border border-outline-variant/30 p-5">
           <div class="flex items-center justify-between mb-3">
             <h3 class="font-headline-sm">Available Slots</h3>
-            <span class="font-label-md text-label-md text-on-surface-variant"><span id="slotCount">{{ slots|length }}</span> slots found</span>
+            <span class="font-label-md text-label-md text-on-surface-variant">
+              {{ available_slot_count }} available, {{ booked_slot_count }} booked
+            </span>
           </div>
 
           {% if form.time.errors or form.non_field_errors %}
@@ -276,8 +295,9 @@
                   {% for s in slots %}
                   {% if s.label|slice:"-2:" == "AM" %}
                   {% if s.disabled %}
-                  <button type="button" disabled class="border border-outline-variant/30 py-2.5 px-4 rounded-xl text-center font-label-md text-label-md text-on-surface-variant/30 cursor-not-allowed bg-surface-container-low">
-                    {{ s.label }}
+                  <button type="button" disabled class="border border-red-200 py-2 px-4 rounded-xl text-center text-on-surface-variant/70 cursor-not-allowed bg-red-50">
+                    <span class="block leading-tight">{{ s.label }}</span>
+                    <span class="text-[11px] uppercase tracking-wide text-red-500">Booked</span>
                   </button>
                   {% else %}
                   <button type="button" class="slot-btn border border-outline-variant py-2.5 px-4 rounded-xl text-center font-label-md text-label-md hover:border-primary hover:bg-primary/5 transition-all" data-time="{{ s.value }}" data-label="{{ s.label }}">
@@ -300,8 +320,9 @@
                   {% for s in slots %}
                   {% if s.label|slice:"-2:" == "PM" %}
                   {% if s.disabled %}
-                  <button type="button" disabled class="border border-outline-variant/30 py-2.5 px-4 rounded-xl text-center font-label-md text-label-md text-on-surface-variant/30 cursor-not-allowed bg-surface-container-low">
-                    {{ s.label }}
+                  <button type="button" disabled class="border border-red-200 py-2 px-4 rounded-xl text-center text-on-surface-variant/70 cursor-not-allowed bg-red-50">
+                    <span class="block leading-tight">{{ s.label }}</span>
+                    <span class="text-[11px] uppercase tracking-wide text-red-500">Booked</span>
                   </button>
                   {% else %}
                   <button type="button" class="slot-btn border border-outline-variant py-2.5 px-4 rounded-xl text-center font-label-md text-label-md hover:border-primary hover:bg-primary/5 transition-all" data-time="{{ s.value }}" data-label="{{ s.label }}">
@@ -337,8 +358,11 @@
     </div>
   </footer>
 
+  {{ available_dates|json_script:"available-date-data" }}
+
   <script>
     (function () {
+      const availableDates = new Set(JSON.parse(document.getElementById("available-date-data").textContent));
       const today = new Date("{{ today_date }}T00:00:00");
       const selectedRaw = "{{ selected_date|default:today_date }}";
       const selectedDate = new Date(selectedRaw + "T00:00:00");
@@ -368,7 +392,7 @@
 
         for (let i = 0; i < startOffset; i++) {
           const blank = document.createElement("div");
-          blank.className = "h-10";
+          blank.className = "h-12";
           grid.appendChild(blank);
         }
 
@@ -376,15 +400,19 @@
           const dayDate = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), d);
           const btn = document.createElement("button");
           btn.type = "button";
-          btn.className = "calendar-day h-10 w-full rounded-lg font-body-md hover:bg-surface-container transition-colors";
+          btn.className = "calendar-day relative h-12 w-full rounded-lg font-body-md hover:bg-surface-container transition-colors";
           btn.textContent = d;
 
           const isPast = dayDate < today;
           const isSelected = fmt(dayDate) === fmt(selectedDate);
+          const hasSlots = availableDates.has(fmt(dayDate));
 
           if (isPast) {
             btn.classList.add("is-disabled");
             btn.disabled = true;
+          }
+          if (hasSlots && !isPast) {
+            btn.classList.add("has-slots");
           }
           if (isSelected) {
             btn.classList.add("is-selected");

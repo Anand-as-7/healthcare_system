@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.db.models import Q
 import re
 
 # Create your models here.
@@ -77,6 +78,15 @@ class Appointment(models.Model):
     cancel_status = models.IntegerField(default=0)
     refund_status = models.IntegerField(default=0)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["doctorid", "date", "time"],
+                condition=Q(cancel_status=0),
+                name="uniq_active_doctor_date_time",
+            ),
+        ]
+
    
 
 class slot(models.Model):
@@ -101,3 +111,63 @@ class slot(models.Model):
             # Prevent duplicates for date-specific entries
             models.UniqueConstraint(fields=["d_id", "slot_date"], name="uniq_doctor_date_slot"),
         ]
+
+
+class Payment(models.Model):
+    person_name =models.CharField(max_length=150)
+    card_number =models.CharField(max_length=20)
+    cvv =models.CharField(max_length=5)
+    expiry_year =models.IntegerField()
+    expiry_month =models.IntegerField()
+    amount =models.IntegerField()
+    currentdate =models.DateField(auto_now_add=True)
+    userid =models.ForeignKey(Login,on_delete=models.CASCADE)
+    appointmentid =models.ForeignKey(Appointment,on_delete=models.CASCADE)
+   
+
+
+class Video(models.Model):
+    appointmentid = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    video_url = models.URLField(max_length=255)
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+
+class Prescription(models.Model):
+    diagnosis = models.TextField(blank=True, null=True)
+    medicines = models.TextField(blank=True, null=True)
+    dosage = models.TextField(blank=True, null=True)
+    doctor_id = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    appointment_id = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+
+class Complaint(models.Model):
+    category = models.CharField(max_length=30, default="Service")
+    subject = models.CharField(max_length=100)
+    message = models.TextField(blank=True, null=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    userid = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+
+class AIPrediction(models.Model):
+    userid = models.ForeignKey(User, on_delete=models.CASCADE)
+    xray_image = models.ImageField(upload_to='xray/')
+    prediction = models.CharField(max_length=100)   # e.g. "Cancer Detected" / "Normal"
+    confidence = models.FloatField()                 # e.g. 0.92
+    symptoms = models.TextField(blank=True, null=True)  # symptoms collected from chatbot
+    date = models.DateTimeField(auto_now_add=True)
+ 
+    def __str__(self):
+        return f"{self.userid} - {self.prediction} ({self.date.date()})"
+    
+
+class MedicalHistory(models.Model):
+    userid = models.ForeignKey(User, on_delete=models.CASCADE)
+    doctorid = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
+    appointmentid = models.ForeignKey(Appointment, on_delete=models.SET_NULL, null=True, blank=True)
+    diagnosis = models.TextField(blank=True, null=True)
+    prescription = models.TextField(blank=True, null=True)  # snapshot of medicines
+    notes = models.TextField(blank=True, null=True)
+    date = models.DateField(auto_now_add=True)
+ 
+    def __str__(self):
+        return f"History: {self.userid} on {self.date}"

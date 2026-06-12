@@ -30,6 +30,34 @@ urlpatterns = [
     path('slotadding/<int:id>/', views.slotadding, name='slotadding'),
     path('delete_slot/<int:slot_id>/', views.delete_slot, name='delete_slot'),
 
+    path('payment/<int:id>/', views.payment, name='payment'),
+    path('bookingconfirmation/<int:id>/', views.bookingconfirmation, name='bookingconfirmation'),
+    path('bookingconfirmation/<int:id>/receipt/', views.download_receipt, name='download_receipt'),
+
+
+    path('user_appointmentsview', views.user_appointmentsview, name='user_appointmentsview'),
+    path('user_appointmentdetailsview/<int:id>/', views.user_appointmentdetailsview, name='user_appointmentdetailsview'),
+
+    path('resheduleappointment/<int:id>/', views.resheduleappointment, name='resheduleappointment'),
+    path('cancelappointment/<int:id>/', views.cancelappointment, name='cancelappointment'),
+
+    path('doctorappointmentsview', views.doctorappointmentsview, name='doctorappointmentsview'),
+
+    path('videoconference/<int:id>/', views.videoconference, name='videoconference'),
+    path('save-appointment-url/<int:id>/', views.save_appointment_url, name='save_appointment_url'),
+
+    path('user_complaints', views.user_complaints, name='user_complaints'),
+
+
+
+    # ── AI Chatbot + X-ray Prediction ─────────────────────────
+    path('ai-chatbot/', views.ai_chatbot_predict, name='ai_chatbot'),
+ 
+    # ── AI Diet & Health Suggestions ──────────────────────────
+    path('ai-diet/', views.ai_diet_suggestions, name='ai_diet'),
+ 
+    # ── Medical History ────────────────────────────────────────
+    path('medical-history/', views.user_medical_history, name='user_medical_history'),
 
 
 

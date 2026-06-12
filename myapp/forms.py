@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
 from django.utils import timezone
+import re
 
 
 class LoginForm(forms.ModelForm):
@@ -155,3 +156,89 @@ def clean(self):
         self.add_error("mode", "Select a valid scheduling option.")
  
     return cleaned
+
+
+
+class PaymentForm(forms.ModelForm):
+    def clean_person_name(self):
+        name = (self.cleaned_data.get("person_name") or "").strip()
+        if not re.fullmatch(r"[A-Za-z ]+", name):
+            raise forms.ValidationError("Cardholder name must contain letters only.")
+        if len(name.replace(" ", "")) < 2:
+            raise forms.ValidationError("Cardholder name is too short.")
+        return " ".join(name.split())
+
+    def clean_card_number(self):
+        raw = (self.cleaned_data.get("card_number") or "").strip()
+        digits = re.sub(r"\D", "", raw)
+        if len(digits) != 16:
+            raise forms.ValidationError("Card number must be exactly 16 digits.")
+        return digits
+
+    def clean_cvv(self):
+        cvv = (self.cleaned_data.get("cvv") or "").strip()
+        if not re.fullmatch(r"\d{3}", cvv):
+            raise forms.ValidationError("CVV must be exactly 3 digits.")
+        return cvv
+
+    class Meta:
+        model =Payment
+        fields =['person_name','card_number','cvv','expiry_year','expiry_month']
+
+
+
+class Prescriptionform(forms.ModelForm):
+    class Meta:
+        model=Prescription
+        fields=['diagnosis','medicines','dosage']
+        widgets = {
+            'diagnosis': forms.Textarea(attrs={'rows': 4, 'class': 'w-full resize-y rounded-lg border-outline-variant bg-surface-container-lowest text-sm focus:border-primary focus:ring-primary/20', 'placeholder': 'Enter diagnosis summary'}),
+            'medicines': forms.Textarea(attrs={'rows': 4, 'class': 'w-full resize-y rounded-lg border-outline-variant bg-surface-container-lowest text-sm focus:border-primary focus:ring-primary/20', 'placeholder': 'List medicines with strength'}),
+            'dosage': forms.Textarea(attrs={'rows': 3, 'class': 'w-full resize-y rounded-lg border-outline-variant bg-surface-container-lowest text-sm focus:border-primary focus:ring-primary/20', 'placeholder': 'Add dosage schedule and duration'}),
+        }
+
+
+class ComplaintForm(forms.ModelForm):
+    CATEGORY_CHOICES = [
+        ("Billing", "Billing"),
+        ("Service", "Service"),
+        ("Medical", "Medical"),
+        ("Technical", "Technical"),
+    ]
+
+    category = forms.ChoiceField(choices=CATEGORY_CHOICES)
+
+    class Meta:
+        model = Complaint
+        fields = ["category", "subject", "message"]
+        widgets = {
+            "subject": forms.TextInput(attrs={
+                "id": "subject",
+                "class": "w-full h-12 px-4 rounded-lg bg-surface-container-lowest border border-outline-variant text-on-surface font-body-md input-focus-ring outline-none transition-all placeholder:text-on-surface-variant/50",
+                "placeholder": "Briefly describe the issue",
+            }),
+            "message": forms.Textarea(attrs={
+                "id": "description",
+                "rows": 6,
+                "class": "w-full p-4 rounded-lg bg-surface-container-lowest border border-outline-variant text-on-surface font-body-md input-focus-ring outline-none transition-all placeholder:text-on-surface-variant/50 resize-y",
+                "placeholder": "Provide as much detail as possible to help us resolve your concern...",
+            }),
+        }
+
+
+
+class AIPredictionForm(forms.ModelForm):
+    class Meta:
+        model = AIPrediction
+        fields = ['xray_image', 'symptoms']
+        widgets = {
+            'symptoms': forms.Textarea(attrs={
+                'rows': 4,
+                'class': 'w-full rounded-lg border border-outline-variant bg-surface-container-lowest p-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary',
+                'placeholder': 'Describe your symptoms (e.g. cough, chest pain, shortness of breath)...'
+            }),
+            'xray_image': forms.ClearableFileInput(attrs={
+                'class': 'w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-on-primary hover:file:bg-primary/90',
+                'accept': 'image/*'
+            }),
+        }

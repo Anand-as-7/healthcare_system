@@ -1,0 +1,190 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reschedule Appointment - MedTech Global</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="{% static 'css/user.css' %}" rel="stylesheet" />
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            tertiary: "#00525a",
+            "on-tertiary-container": "#82edfc",
+            "on-primary-fixed-variant": "#003dab",
+            "on-background": "#151c27",
+            "inverse-surface": "#2a313d",
+            "on-primary-container": "#d4dcff",
+            "primary-fixed": "#dbe1ff",
+            "surface-tint": "#1353d8",
+            "surface-container-highest": "#dce2f3",
+            "primary-fixed-dim": "#b5c4ff",
+            "on-secondary-fixed": "#25005a",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed": "#00174d",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "on-tertiary": "#ffffff",
+            background: "#f9f9ff",
+            "surface-container-high": "#e2e8f8",
+            "on-tertiary-fixed-variant": "#004f57",
+            "on-tertiary-fixed": "#001f23",
+            "tertiary-container": "#006c77",
+            "surface-dim": "#d3daea",
+            "inverse-primary": "#b5c4ff",
+            "on-error": "#ffffff",
+            error: "#ba1a1a",
+            "secondary-fixed": "#eaddff",
+            "surface-bright": "#f9f9ff",
+            "on-surface": "#151c27",
+            "on-surface-variant": "#434654",
+            "secondary-fixed-dim": "#d2bbff",
+            "tertiary-fixed": "#92f1ff",
+            surface: "#f9f9ff",
+            "secondary-container": "#8b4aff",
+            "inverse-on-surface": "#ebf1ff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed-dim": "#6ad6e5",
+            "primary-container": "#1a56db",
+            secondary: "#7127e5",
+            "surface-variant": "#dce2f3",
+            "on-secondary-container": "#fffbff",
+            primary: "#003fb1",
+            "outline-variant": "#c3c5d7",
+            outline: "#737686",
+            "on-error-container": "#93000a"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "16px",
+            xl: "24px",
+            full: "9999px"
+          },
+          spacing: {
+            "section-padding": "64px",
+            "margin-desktop": "48px",
+            "stack-sm": "8px",
+            "stack-md": "16px",
+            gutter: "24px",
+            "container-max": "1440px",
+            "margin-mobile": "16px",
+            unit: "8px",
+            "stack-lg": "32px"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+  <header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-stack-sm">
+      <span class="material-symbols-outlined text-primary">monitor_heart</span>
+      <h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">MedTech Global</h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high/50 p-2 rounded-full transition-colors">notifications</button>
+      <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+        <span class="material-symbols-outlined text-primary">account_circle</span>
+      </div>
+    </div>
+  </header>
+
+  <aside class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant/20 pt-16 z-40">
+    <div class="p-6 flex items-center gap-4 border-b border-outline-variant/10 mb-4">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+        <span class="material-symbols-outlined">account_circle</span>
+      </div>
+      <div>
+        <p class="font-label-md text-label-md text-on-surface font-bold">{{ user.name }}</p>
+        <p class="text-xs text-on-surface-variant">Patient ID: #{{ patient_code }}</p>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-1 px-3">
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'user_dashboard' %}">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="font-body-md text-body-md">Home</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'userdoctorsview' %}">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="font-body-md text-body-md">Book Appointment</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-medium border-r-4 border-primary bg-primary/5 transition-colors" href="{% url 'user_appointmentsview' %}">
+        <span class="material-symbols-outlined">assignment_ind</span>
+        <span class="font-body-md text-body-md">View Appointments</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'logout' %}">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="font-body-md text-body-md">Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="pt-24 pb-10 md:pl-72 px-margin-mobile md:px-margin-desktop">
+    <div class="max-w-container-max mx-auto space-y-stack-md">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'user_appointmentdetailsview' appointment.id %}" class="text-primary hover:text-primary/80">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h2 class="font-headline-lg text-headline-lg text-on-surface">Reschedule Appointment</h2>
+      </div>
+
+      {% if messages %}
+      <section class="space-y-2">
+        {% for message in messages %}
+        <div class="rounded-lg px-4 py-3 border {% if message.tags == 'error' %}bg-error-container/40 text-on-error-container border-error/30{% else %}bg-tertiary-fixed/30 text-on-surface border-outline-variant/30{% endif %}">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <section class="bg-white rounded-xl border border-outline-variant/20 p-5 shadow-sm">
+        <p class="text-sm text-on-surface-variant">Appointment ID: #{{ appointment_code }}</p>
+        <h3 class="font-headline-sm text-on-surface mt-2">{{ appointment.doctorid.doctor_name }} - {{ appointment.doctorid.specialization }}</h3>
+        <p class="text-on-surface-variant mt-1">Current slot: {{ appointment.date|date:"l, M d, Y" }} at {{ appointment.time|time:"h:i A" }}</p>
+        <p class="text-on-surface-variant">{{ appointment.doctorid.hospitalid.hospital_name }}</p>
+      </section>
+
+      <section class="bg-white rounded-xl border border-outline-variant/20 p-5 shadow-sm space-y-4">
+        <form method="get" class="max-w-sm">
+          <label for="date" class="block text-sm text-on-surface-variant mb-2">Select New Date</label>
+          <input id="date" name="date" type="date" min="{{ today|default:'' }}" value="{{ selected_date }}" class="w-full h-12 rounded-lg border border-outline-variant bg-surface-container-lowest px-3 focus:border-primary focus:ring-primary/20" onchange="this.form.submit()" />
+        </form>
+
+        <div>
+          <h4 class="font-label-md text-on-surface mb-3">Available Slots</h4>
+          {% if slots %}
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="date" value="{{ selected_date }}" />
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              {% for slot in slots %}
+                {% if slot.disabled %}
+                <button type="button" disabled class="h-11 rounded-lg border border-outline-variant bg-surface-container-low text-on-surface-variant opacity-60 cursor-not-allowed">{{ slot.label }}</button>
+                {% else %}
+                <button type="submit" name="time" value="{{ slot.value }}" class="h-11 rounded-lg border border-outline-variant hover:border-primary hover:bg-primary/5 transition-colors {% if slot.value == current_time_value and selected_date == appointment.date|date:'Y-m-d' %}bg-primary text-on-primary border-primary{% endif %}">{{ slot.label }}</button>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </form>
+          {% else %}
+          <div class="rounded-lg border border-outline-variant/30 bg-surface-container-low p-4 text-on-surface-variant">
+            No slots available for {{ selected_date }}. Please choose another date.
+          </div>
+          {% endif %}
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
+

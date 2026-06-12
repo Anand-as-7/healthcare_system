@@ -1,0 +1,588 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedTech Clinical | Appointments</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="{% static 'css/doctor.css' %}" rel="stylesheet"/>
+<link href="{% static 'css/dashboard-polish.css' %}" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "tertiary": "#00525a",
+        "on-tertiary-container": "#82edfc",
+        "on-primary-fixed-variant": "#003dab",
+        "on-background": "#151c27",
+        "inverse-surface": "#2a313d",
+        "on-primary-container": "#d4dcff",
+        "primary-fixed": "#dbe1ff",
+        "surface-tint": "#1353d8",
+        "surface-container-highest": "#dce2f3",
+        "primary-fixed-dim": "#b5c4ff",
+        "on-secondary-fixed": "#25005a",
+        "on-secondary": "#ffffff",
+        "error-container": "#ffdad6",
+        "surface-container-lowest": "#ffffff",
+        "on-primary-fixed": "#00174d",
+        "surface-container-low": "#f0f3ff",
+        "surface-container": "#e7eefe",
+        "on-tertiary": "#ffffff",
+        "background": "#f9f9ff",
+        "surface-container-high": "#e2e8f8",
+        "on-tertiary-fixed-variant": "#004f57",
+        "on-tertiary-fixed": "#001f23",
+        "tertiary-container": "#006c77",
+        "surface-dim": "#d3daea",
+        "inverse-primary": "#b5c4ff",
+        "on-error": "#ffffff",
+        "error": "#ba1a1a",
+        "secondary-fixed": "#eaddff",
+        "surface-bright": "#f9f9ff",
+        "on-surface": "#151c27",
+        "on-surface-variant": "#434654",
+        "secondary-fixed-dim": "#d2bbff",
+        "tertiary-fixed": "#92f1ff",
+        "surface": "#f9f9ff",
+        "secondary-container": "#8b4aff",
+        "inverse-on-surface": "#ebf1ff",
+        "on-primary": "#ffffff",
+        "tertiary-fixed-dim": "#6ad6e5",
+        "primary-container": "#1a56db",
+        "secondary": "#7127e5",
+        "surface-variant": "#dce2f3",
+        "on-secondary-container": "#fffbff",
+        "primary": "#003fb1",
+        "outline-variant": "#c3c5d7",
+        "on-secondary-fixed-variant": "#5a00c6",
+        "outline": "#737686",
+        "on-error-container": "#93000a"
+      }
+    }
+  }
+}
+</script>
+</head>
+<body class="bg-background text-on-background">
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-md border-b border-outline-variant/30 shadow-sm flex justify-between items-center h-16 px-4 md:px-12">
+<div class="flex min-w-0 items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">monitor_heart</span>
+<h1 class="truncate text-xl font-bold text-primary tracking-tight sm:text-2xl">MedTech Global</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container-high/50 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high/50 transition-colors relative">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="hidden md:flex items-center gap-3 ml-4 pl-4 border-l border-outline-variant/30">
+<div class="text-right">
+<p class="text-sm font-semibold text-on-surface">{{ doctor.doctor_name }}</p>
+<p class="text-xs text-outline">{{ doctor.specialization }}</p>
+</div>
+{% if doctor.photo %}
+<img alt="{{ doctor.doctor_name }}" class="w-10 h-10 rounded-full object-cover border-2 border-primary-container" src="{{ doctor.photo.url }}"/>
+{% else %}
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center border-2 border-primary-container">{{ doctor.doctor_name|slice:":1"|upper }}</div>
+{% endif %}
+</div>
+</div>
+</header>
+
+<aside class="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col bg-surface-container-low border-r border-outline-variant/20 pt-20">
+<nav class="flex flex-col gap-1 px-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="{% url 'doctor_dashboard' %}">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-base">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors" href="{% url 'doctorappointmentsview' %}">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-base">Appointments</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="text-base">Medical History</span>
+</a>
+</nav>
+<div class="mt-auto p-4 m-4 bg-primary-container/10 rounded-xl">
+<p class="text-sm text-primary font-bold">Today Overview</p>
+<div class="mt-2 h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: {% if counts.all %}{% widthratio counts.pending_today counts.all 100 %}{% else %}0{% endif %}%;"></div>
+</div>
+<p class="mt-2 text-xs text-on-surface-variant">{{ counts.pending_today }} pending today</p>
+</div>
+</aside>
+
+<main class="md:ml-64 pt-20 pb-24 px-4 md:px-12 max-w-[1440px] mx-auto">
+<section class="appointment-hero mb-6 overflow-hidden rounded-2xl border border-outline-variant/30 bg-white shadow-sm">
+<div class="grid gap-6 p-5 lg:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] lg:items-center lg:p-6">
+<div class="flex min-w-0 flex-col">
+<div>
+<div class="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary-fixed px-4 py-2 text-sm font-semibold text-primary">
+<span class="material-symbols-outlined text-[18px]">event_available</span>
+Clinical Schedule
+</div>
+<h2 class="text-3xl font-bold leading-tight text-on-surface sm:text-4xl">Appointments Workspace</h2>
+<p class="mt-3 max-w-2xl text-base text-on-surface-variant sm:text-lg">Track consultations and manage prescriptions with live data.</p>
+</div>
+<div class="mt-6 flex gap-2 overflow-x-auto pb-1">
+<a class="px-5 py-2 rounded-full text-base font-semibold whitespace-nowrap {% if current_status == 'all' %}bg-primary text-on-primary{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest{% endif %}" href="{% url 'doctorappointmentsview' %}?status=all">All ({{ counts.all }})</a>
+<a class="px-5 py-2 rounded-full text-base font-semibold whitespace-nowrap {% if current_status == 'pending_today' %}bg-primary text-on-primary{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest{% endif %}" href="{% url 'doctorappointmentsview' %}?status=pending_today">Pending Today ({{ counts.pending_today }})</a>
+<a class="px-5 py-2 rounded-full text-base font-semibold whitespace-nowrap {% if current_status == 'upcoming' %}bg-primary text-on-primary{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest{% endif %}" href="{% url 'doctorappointmentsview' %}?status=upcoming">Upcoming ({{ counts.upcoming }})</a>
+<a class="px-5 py-2 rounded-full text-base font-semibold whitespace-nowrap {% if current_status == 'cancelled' %}bg-primary text-on-primary{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest{% endif %}" href="{% url 'doctorappointmentsview' %}?status=cancelled">Cancelled ({{ counts.cancelled }})</a>
+</div>
+</div>
+<div class="grid gap-3 sm:grid-cols-3 lg:gap-4">
+<div class="appointment-stat-card rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4">
+<div class="flex h-full min-h-[104px] flex-col justify-between">
+<div class="flex items-center justify-between gap-3">
+<p class="text-sm font-medium text-outline">Today</p>
+<span class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-fixed text-primary">
+<span class="material-symbols-outlined text-[20px]">calendar_today</span>
+</span>
+</div>
+<p class="mt-4 text-3xl font-bold leading-none text-primary">{{ today|date:"M d" }}</p>
+</div>
+</div>
+<div class="appointment-stat-card rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4">
+<div class="flex h-full min-h-[104px] flex-col justify-between">
+<div class="flex items-center justify-between gap-3">
+<p class="text-sm font-medium text-outline">Total</p>
+<span class="flex h-9 w-9 items-center justify-center rounded-xl bg-surface-container-high text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+</span>
+</div>
+<p class="mt-4 text-3xl font-bold leading-none text-on-surface">{{ counts.all }}</p>
+</div>
+</div>
+<div class="appointment-stat-card rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4">
+<div class="flex h-full min-h-[104px] flex-col justify-between">
+<div class="flex items-center justify-between gap-3">
+<p class="text-sm font-medium text-outline">With Rx</p>
+<span class="flex h-9 w-9 items-center justify-center rounded-xl bg-tertiary/10 text-tertiary">
+<span class="material-symbols-outlined text-[20px]">prescriptions</span>
+</span>
+</div>
+<p class="mt-4 text-3xl font-bold leading-none text-tertiary">{{ counts.with_rx }}</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+{% if messages %}
+<section class="mb-4 space-y-2">
+{% for message in messages %}
+<div class="rounded-xl px-4 py-3 border {% if message.tags == 'success' %}border-primary/20 bg-primary-fixed/30 text-on-surface{% elif message.tags == 'error' %}border-error/30 bg-error-container/30 text-on-error-container{% else %}border-outline-variant/30 bg-white text-on-surface{% endif %}">
+{{ message }}
+</div>
+{% endfor %}
+</section>
+{% endif %}
+
+<section class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
+<div class="overflow-hidden rounded-2xl border border-outline-variant/30 bg-white shadow-sm">
+<div class="flex flex-col gap-3 border-b border-outline-variant/20 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+<div>
+<p class="text-sm font-semibold text-primary">Patient Queue</p>
+<h3 class="text-xl font-semibold text-on-surface">Appointments List</h3>
+</div>
+<div class="rounded-full bg-surface-container-low px-3 py-1 text-sm font-medium text-on-surface-variant">{{ counts.all }} total appointments</div>
+</div>
+
+<div class="divide-y divide-outline-variant/20">
+{% for row in appointment_rows %}
+<article class="appointment-row {% if row.category == 'cancelled' %}appointment-row-cancelled{% endif %} bg-white px-4 py-5 transition-colors hover:bg-surface-container-lowest sm:px-5">
+<div class="grid gap-4 lg:grid-cols-[108px_minmax(0,1fr)_auto] lg:items-center">
+<div class="flex items-center gap-3 lg:flex-col lg:items-start lg:gap-2">
+<div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary-fixed text-lg font-bold text-primary">
+{{ row.appointment.userid.name|slice:":1"|upper }}
+</div>
+<div>
+<p class="text-xs font-semibold uppercase text-outline">
+{% if row.category == 'pending_today' %}
+Today
+{% else %}
+{{ row.appointment.date|date:"M d" }}
+{% endif %}
+</p>
+<p class="text-sm font-semibold text-on-surface">{{ row.appointment.time|time:"h:i A" }}</p>
+</div>
+</div>
+
+<div class="min-w-0">
+<div class="flex flex-wrap items-center gap-2">
+<h4 class="truncate text-2xl font-semibold text-on-surface">{{ row.appointment.userid.name }}</h4>
+{% if row.category == 'pending_today' %}
+<span class="rounded-full bg-secondary-fixed px-3 py-1 text-sm font-medium text-on-secondary-fixed">Pending Today</span>
+{% elif row.category == 'upcoming' %}
+<span class="rounded-full bg-tertiary/10 px-3 py-1 text-sm font-medium text-tertiary">Upcoming</span>
+{% else %}
+<span class="rounded-full bg-error-container px-3 py-1 text-sm font-medium text-on-error-container">Cancelled</span>
+{% endif %}
+</div>
+<div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">tag</span>
+Appointment ID: #{{ row.appointment.id }}
+</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+{% if row.category == 'pending_today' %}
+Today, {{ row.appointment.time|time:"h:i A" }}
+{% else %}
+{{ row.appointment.date|date:"M d, Y" }}, {{ row.appointment.time|time:"h:i A" }}
+{% endif %}
+</span>
+</div>
+{% if row.prescription %}
+<div class="mt-3 grid gap-2 rounded-xl border border-primary/20 bg-primary-fixed/20 p-3 text-sm text-on-surface md:grid-cols-2">
+<p class="min-w-0 truncate"><span class="font-semibold">Diagnosis:</span> {{ row.prescription.diagnosis|default:"-" }}</p>
+<p class="min-w-0 truncate"><span class="font-semibold">Medicines:</span> {{ row.prescription.medicines|default:"-" }}</p>
+</div>
+{% else %}
+<div class="mt-3 inline-flex items-center gap-2 rounded-lg bg-surface-container-low px-3 py-2 text-sm font-medium text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">clinical_notes</span>
+Prescription pending
+</div>
+{% endif %}
+</div>
+
+<div class="flex w-full flex-col gap-2 sm:flex-row lg:w-auto lg:justify-end">
+<button
+  type="button"
+  class="open-view-modal rounded-lg border border-outline-variant px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container-low"
+  data-appointment-id="{{ row.appointment.id }}"
+  data-patient-name="{{ row.appointment.userid.name|escapejs }}"
+  data-patient-age="{{ row.appointment.userid.age|default:'-' }}"
+  data-patient-gender="{{ row.appointment.userid.gender|default:'-'|escapejs }}"
+  data-patient-contact="{{ row.appointment.userid.contactnumber|default:'-'|escapejs }}"
+  data-date="{{ row.appointment.date|date:'M d, Y' }}"
+  data-time="{{ row.appointment.time|time:'h:i A' }}"
+  data-status="{% if row.category == 'pending_today' %}Pending Today{% elif row.category == 'upcoming' %}Upcoming{% else %}Cancelled{% endif %}"
+  data-has-rx="{% if row.prescription %}1{% else %}0{% endif %}"
+  data-diagnosis="{{ row.prescription.diagnosis|default_if_none:''|escapejs }}"
+  data-medicines="{{ row.prescription.medicines|default_if_none:''|escapejs }}"
+  data-dosage="{{ row.prescription.dosage|default_if_none:''|escapejs }}"
+>
+<span class="material-symbols-outlined align-middle text-[18px] mr-1">visibility</span>
+View
+</button>
+{% if row.category != 'cancelled' %}
+<a href="{% url 'videoconference' row.appointment.id %}" class="rounded-lg bg-surface-container-high px-4 py-2 text-sm font-medium text-on-surface hover:bg-surface-container">
+<span class="material-symbols-outlined align-middle text-[18px] mr-1">videocam</span>
+Start Call
+</a>
+<button
+  type="button"
+  class="open-rx-modal rounded-lg bg-primary text-on-primary px-4 py-2 text-sm font-semibold hover:opacity-90"
+  data-appointment-id="{{ row.appointment.id }}"
+  data-patient-name="{{ row.appointment.userid.name|escapejs }}"
+  data-has-rx="{% if row.prescription %}1{% else %}0{% endif %}"
+  data-diagnosis="{{ row.prescription.diagnosis|default_if_none:''|escapejs }}"
+  data-medicines="{{ row.prescription.medicines|default_if_none:''|escapejs }}"
+  data-dosage="{{ row.prescription.dosage|default_if_none:''|escapejs }}"
+>
+<span class="material-symbols-outlined align-middle text-[18px] mr-1">{% if row.prescription %}edit_note{% else %}add_notes{% endif %}</span>
+{% if row.prescription %}Edit Prescription{% else %}Add Prescription{% endif %}
+</button>
+{% else %}
+{% if row.appointment.refund_status == 1 %}
+<span class="rounded-lg border border-tertiary/30 bg-tertiary/10 px-4 py-2 text-sm text-tertiary">Refunded</span>
+{% else %}
+<button type="button" class="rounded-lg border border-error/30 px-4 py-2 text-sm text-error hover:bg-error/10">Refund</button>
+{% endif %}
+{% endif %}
+</div>
+</div>
+</article>
+{% empty %}
+<div class="px-6 py-12 text-center">
+<div class="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-primary-fixed text-primary">
+<span class="material-symbols-outlined">event_busy</span>
+</div>
+<p class="mt-4 text-xl font-semibold text-on-surface">No appointments found for this filter.</p>
+<p class="mt-1 text-sm text-on-surface-variant">Try another status tab.</p>
+</div>
+{% endfor %}
+</div>
+</div>
+
+<aside class="rounded-2xl border border-outline-variant/30 bg-white p-5 shadow-sm xl:sticky xl:top-24 xl:self-start">
+<p class="text-sm font-semibold text-primary">Queue Snapshot</p>
+<h3 class="mt-1 text-xl font-semibold text-on-surface">Today Overview</h3>
+<div class="mt-5 space-y-3">
+<div class="rounded-xl bg-primary-fixed/40 p-4">
+<div class="flex items-center justify-between gap-3">
+<span class="text-sm font-medium text-on-surface-variant">Pending Today</span>
+<span class="text-2xl font-bold text-primary">{{ counts.pending_today }}</span>
+</div>
+</div>
+<div class="rounded-xl bg-tertiary/10 p-4">
+<div class="flex items-center justify-between gap-3">
+<span class="text-sm font-medium text-on-surface-variant">Upcoming</span>
+<span class="text-2xl font-bold text-tertiary">{{ counts.upcoming }}</span>
+</div>
+</div>
+<div class="rounded-xl bg-error-container/40 p-4">
+<div class="flex items-center justify-between gap-3">
+<span class="text-sm font-medium text-on-surface-variant">Cancelled</span>
+<span class="text-2xl font-bold text-on-error-container">{{ counts.cancelled }}</span>
+</div>
+</div>
+</div>
+<div class="mt-5 rounded-xl border border-outline-variant/30 p-4">
+<p class="text-xs font-semibold uppercase text-outline">Prescription Coverage</p>
+<div class="mt-3 h-2 w-full overflow-hidden rounded-full bg-surface-container-high">
+<div class="h-full rounded-full bg-primary" style="width: {% if counts.all %}{% widthratio counts.with_rx counts.all 100 %}{% else %}0{% endif %}%;"></div>
+</div>
+<p class="mt-2 text-sm text-on-surface-variant">{{ counts.with_rx }} of {{ counts.all }} appointments with Rx</p>
+</div>
+</aside>
+</section>
+</main>
+
+<div id="viewModal" class="fixed inset-0 z-[65] hidden">
+<div id="viewBackdrop" class="absolute inset-0 bg-on-surface/45 backdrop-blur-sm"></div>
+<div class="modal-shell relative">
+<div class="modal-panel w-full max-w-3xl rounded-xl border border-outline-variant/30 bg-white shadow-2xl overflow-hidden">
+<div class="flex items-start justify-between gap-4 border-b border-outline-variant/20 px-4 py-4 sm:px-6 sm:py-5">
+<div>
+<p class="text-sm font-semibold text-primary">Prescription Details</p>
+<h3 id="viewPatientName" class="text-xl font-semibold text-on-surface sm:text-2xl">-</h3>
+<p id="viewAppointmentMeta" class="text-sm text-on-surface-variant mt-1">-</p>
+</div>
+<button id="closeViewModal" type="button" class="rounded-lg p-2 text-on-surface-variant hover:bg-surface-container-low">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+
+<div class="modal-body-scroll grid gap-4 p-4 sm:p-6 md:grid-cols-[0.85fr_1.15fr]">
+<div class="space-y-4">
+<div class="rounded-lg border border-outline-variant/25 bg-surface-container-lowest p-4">
+<p class="text-xs font-semibold text-outline uppercase">Patient</p>
+<dl class="mt-3 space-y-2 text-sm">
+<div class="flex justify-between gap-3"><dt class="text-on-surface-variant">Age</dt><dd id="viewPatientAge" class="font-medium text-on-surface">-</dd></div>
+<div class="flex justify-between gap-3"><dt class="text-on-surface-variant">Gender</dt><dd id="viewPatientGender" class="font-medium text-on-surface">-</dd></div>
+<div class="flex justify-between gap-3"><dt class="text-on-surface-variant">Contact</dt><dd id="viewPatientContact" class="font-medium text-on-surface">-</dd></div>
+<div class="flex justify-between gap-3"><dt class="text-on-surface-variant">Appointment</dt><dd id="viewAppointmentId" class="font-medium text-on-surface">-</dd></div>
+</dl>
+</div>
+<div id="viewRxState" class="rounded-lg border border-tertiary/20 bg-tertiary/10 p-4 text-sm font-medium text-tertiary">Prescription available</div>
+</div>
+
+<div id="viewRxContent" class="space-y-3">
+<div class="rounded-lg border border-outline-variant/25 p-4">
+<p class="text-xs font-semibold text-outline uppercase">Diagnosis</p>
+<p id="viewDiagnosis" class="mt-2 whitespace-pre-wrap text-sm text-on-surface">-</p>
+</div>
+<div class="rounded-lg border border-outline-variant/25 p-4">
+<p class="text-xs font-semibold text-outline uppercase">Medicines</p>
+<p id="viewMedicines" class="mt-2 whitespace-pre-wrap text-sm text-on-surface">-</p>
+</div>
+<div class="rounded-lg border border-outline-variant/25 p-4">
+<p class="text-xs font-semibold text-outline uppercase">Dosage</p>
+<p id="viewDosage" class="mt-2 whitespace-pre-wrap text-sm text-on-surface">-</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="prescriptionModal" class="fixed inset-0 z-[70] hidden">
+<div id="modalBackdrop" class="absolute inset-0 bg-on-surface/40 backdrop-blur-sm"></div>
+<div class="modal-shell relative">
+<div class="modal-panel w-full max-w-2xl rounded-xl border border-outline-variant/30 bg-surface-container-lowest shadow-2xl overflow-hidden">
+<div class="relative border-b border-outline-variant/20 bg-white px-4 py-4 sm:px-6 sm:py-5">
+<div class="flex items-start gap-3 pr-10">
+<div class="mt-0.5 flex h-10 w-10 items-center justify-center rounded-lg bg-primary-fixed text-primary">
+<span class="material-symbols-outlined">clinical_notes</span>
+</div>
+<div>
+<h3 id="modalTitle" class="text-xl font-semibold text-on-surface sm:text-2xl">Add Prescription</h3>
+<p id="modalSubTitle" class="text-sm text-on-surface-variant mt-1">Fill diagnosis, medicines, and dosage details.</p>
+</div>
+</div>
+<button id="closeModal" type="button" class="absolute top-4 right-4 rounded-lg p-1.5 text-on-surface-variant hover:bg-surface-container-low">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+
+<form method="post" class="modal-body-scroll p-4 space-y-4 sm:p-6">
+{% csrf_token %}
+<input type="hidden" name="appointment_id" id="modalAppointmentId" value="{{ modal_open_appointment_id|default:'' }}">
+<input type="hidden" name="form_action" id="modalFormAction" value="save">
+<input type="hidden" name="status" value="{{ current_status }}">
+
+<div class="rounded-lg border border-outline-variant/30 bg-surface-container-low px-4 py-3">
+<p class="text-xs font-semibold text-outline uppercase">Patient</p>
+<p id="modalPatientName" class="text-lg font-semibold text-on-surface">-</p>
+</div>
+
+<div>
+<label class="block text-sm text-on-surface-variant mb-1" for="{{ prescription_form.diagnosis.id_for_label }}">Diagnosis</label>
+{{ prescription_form.diagnosis }}
+{% if prescription_form.diagnosis.errors %}
+<p class="text-sm text-error mt-1">{{ prescription_form.diagnosis.errors|striptags }}</p>
+{% endif %}
+</div>
+
+<div>
+<label class="block text-sm text-on-surface-variant mb-1" for="{{ prescription_form.medicines.id_for_label }}">Medicines</label>
+{{ prescription_form.medicines }}
+{% if prescription_form.medicines.errors %}
+<p class="text-sm text-error mt-1">{{ prescription_form.medicines.errors|striptags }}</p>
+{% endif %}
+</div>
+
+<div>
+<label class="block text-sm text-on-surface-variant mb-1" for="{{ prescription_form.dosage.id_for_label }}">Dosage</label>
+{{ prescription_form.dosage }}
+{% if prescription_form.dosage.errors %}
+<p class="text-sm text-error mt-1">{{ prescription_form.dosage.errors|striptags }}</p>
+{% endif %}
+</div>
+
+<div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-outline-variant/20 pt-4">
+<button type="submit" id="deletePrescriptionBtn" class="hidden rounded-lg border border-error/30 px-4 py-2 text-sm font-medium text-error hover:bg-error/10">
+<span class="material-symbols-outlined align-middle text-[18px] mr-1">delete</span>
+Remove
+</button>
+<div class="flex flex-col gap-2 sm:ml-auto sm:flex-row">
+<button id="cancelModalBtn" type="button" class="rounded-lg border border-outline-variant px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container-high">Cancel</button>
+<button type="submit" class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-on-primary hover:opacity-90">
+<span class="material-symbols-outlined align-middle text-[18px] mr-1">save</span>
+Save Prescription
+</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+
+<script>
+(function () {
+  const modal = document.getElementById("prescriptionModal");
+  const viewModal = document.getElementById("viewModal");
+  const closeModalBtn = document.getElementById("closeModal");
+  const cancelModalBtn = document.getElementById("cancelModalBtn");
+  const backdrop = document.getElementById("modalBackdrop");
+  const viewBackdrop = document.getElementById("viewBackdrop");
+  const closeViewModalBtn = document.getElementById("closeViewModal");
+  const openButtons = document.querySelectorAll(".open-rx-modal");
+  const viewButtons = document.querySelectorAll(".open-view-modal");
+  const appointmentInput = document.getElementById("modalAppointmentId");
+  const patientNameEl = document.getElementById("modalPatientName");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalSubTitle = document.getElementById("modalSubTitle");
+  const deleteBtn = document.getElementById("deletePrescriptionBtn");
+  const formActionInput = document.getElementById("modalFormAction");
+  const diagnosis = document.getElementById("id_diagnosis");
+  const medicines = document.getElementById("id_medicines");
+  const dosage = document.getElementById("id_dosage");
+  const viewPatientName = document.getElementById("viewPatientName");
+  const viewAppointmentMeta = document.getElementById("viewAppointmentMeta");
+  const viewPatientAge = document.getElementById("viewPatientAge");
+  const viewPatientGender = document.getElementById("viewPatientGender");
+  const viewPatientContact = document.getElementById("viewPatientContact");
+  const viewAppointmentId = document.getElementById("viewAppointmentId");
+  const viewRxState = document.getElementById("viewRxState");
+  const viewRxContent = document.getElementById("viewRxContent");
+  const viewDiagnosis = document.getElementById("viewDiagnosis");
+  const viewMedicines = document.getElementById("viewMedicines");
+  const viewDosage = document.getElementById("viewDosage");
+
+  function openModal(button, useBoundValues) {
+    appointmentInput.value = button.dataset.appointmentId || "";
+    patientNameEl.textContent = button.dataset.patientName || "-";
+    const hasRx = button.dataset.hasRx === "1";
+    modalTitle.textContent = hasRx ? "Edit Prescription" : "Add Prescription";
+    modalSubTitle.textContent = hasRx ? "Update the diagnosis and medication plan." : "Create diagnosis and medication details for this appointment.";
+
+    if (!useBoundValues) {
+      diagnosis.value = button.dataset.diagnosis || "";
+      medicines.value = button.dataset.medicines || "";
+      dosage.value = button.dataset.dosage || "";
+    }
+
+    if (hasRx) {
+      deleteBtn.classList.remove("hidden");
+    } else {
+      deleteBtn.classList.add("hidden");
+    }
+
+    formActionInput.value = "save";
+    modal.classList.remove("hidden");
+  }
+
+  function closeModal() {
+    modal.classList.add("hidden");
+  }
+
+  function openViewModal(button) {
+    const hasRx = button.dataset.hasRx === "1";
+    viewPatientName.textContent = button.dataset.patientName || "-";
+    viewAppointmentMeta.textContent = (button.dataset.date || "-") + " at " + (button.dataset.time || "-") + " - " + (button.dataset.status || "-");
+    viewPatientAge.textContent = button.dataset.patientAge || "-";
+    viewPatientGender.textContent = button.dataset.patientGender || "-";
+    viewPatientContact.textContent = button.dataset.patientContact || "-";
+    viewAppointmentId.textContent = "#" + (button.dataset.appointmentId || "-");
+    viewDiagnosis.textContent = button.dataset.diagnosis || "-";
+    viewMedicines.textContent = button.dataset.medicines || "-";
+    viewDosage.textContent = button.dataset.dosage || "-";
+
+    if (hasRx) {
+      viewRxState.textContent = "Prescription available";
+      viewRxState.className = "rounded-lg border border-tertiary/20 bg-tertiary/10 p-4 text-sm font-medium text-tertiary";
+      viewRxContent.classList.remove("opacity-50");
+    } else {
+      viewRxState.textContent = "No prescription has been added yet.";
+      viewRxState.className = "rounded-lg border border-outline-variant/30 bg-surface-container-low p-4 text-sm font-medium text-on-surface-variant";
+      viewRxContent.classList.add("opacity-50");
+    }
+
+    viewModal.classList.remove("hidden");
+  }
+
+  function closeViewModal() {
+    viewModal.classList.add("hidden");
+  }
+
+  openButtons.forEach((btn) => {
+    btn.addEventListener("click", () => openModal(btn, false));
+  });
+  viewButtons.forEach((btn) => {
+    btn.addEventListener("click", () => openViewModal(btn));
+  });
+
+  closeModalBtn.addEventListener("click", closeModal);
+  cancelModalBtn.addEventListener("click", closeModal);
+  backdrop.addEventListener("click", closeModal);
+  closeViewModalBtn.addEventListener("click", closeViewModal);
+  viewBackdrop.addEventListener("click", closeViewModal);
+
+  deleteBtn.addEventListener("click", function () {
+    formActionInput.value = "delete";
+  });
+
+  const autoOpenId = "{{ modal_open_appointment_id|default:'' }}";
+  const useBound = "{{ modal_use_bound_form|yesno:'1,0' }}" === "1";
+  if (autoOpenId) {
+    const targetBtn = document.querySelector('.open-rx-modal[data-appointment-id="' + autoOpenId + '"]');
+    if (targetBtn) {
+      openModal(targetBtn, useBound);
+    }
+  }
+})();
+</script>
+</body>
+</html>
